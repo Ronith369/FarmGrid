@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.core.database import get_db
 from app.core.dependencies import current_user
 from app.models.models import LabourProvider, LabourRequest, LabourOffer
-from app.schemas.common import LabourProviderCreate, LabourRequestCreate, LabourOfferCreate
+from app.schemas.common import LabourProviderCreate, LabourRequestCreate, LabourOfferCreate, LabourApproveRequest
 from app.services.labour import match_providers, total_wage
 from app.services.notifications import create_notification
 
@@ -39,15 +39,19 @@ def list_labour_requests(region: str | None = None, db=Depends(get_db), user=Dep
         res.append({
             "id": r.id,
             "farmer_id": r.farmer_id,
-            "farmer_name": r.farmer.name if r.farmer else "Farmer",
+            "farmer_name": r.farmer.name if getattr(r, "farmer", None) else "Farmer",
             "work_type": r.work_type,
             "workers_required": r.workers_required,
-            "start_date": r.start_date,
+            "start_date": r.start_date.isoformat() if r.start_date else None,
             "duration_days": r.duration_days,
             "region": r.region,
             "urgency": r.urgency,
             "status": r.status,
-            "created_at": r.created_at,
+            "notes": getattr(r, "notes", None),
+            "contractor_notes": getattr(r, "contractor_notes", None),
+            "accepted_by_user_id": getattr(r, "accepted_by_user_id", None),
+            "accepted_by_name": r.accepted_by.name if getattr(r, "accepted_by", None) else None,
+            "created_at": r.created_at.isoformat() if r.created_at else None,
         })
     return res
 
@@ -70,11 +74,12 @@ def labour_request(data: LabourRequestCreate, db=Depends(get_db), user=Depends(c
             .all()
         ]
 
-    for uid in recipients:
+    start_fmt = request.start_date.strftime("%d %b %Y") if request.start_date else "the specified day"
+    for uid in set(recipients):
         create_notification(
             db, uid,
-            "New labour requirement posted",
-            f"{user.name} needs {request.work_type} ({request.workers_required} workers) in {request.region}. Start: {request.start_date:%d %b}.",
+            "New Labour Requirement Posted",
+            f"Farm Owner {user.name} needs {request.workers_required} workers for {request.work_type} on {start_fmt} in {request.region}.",
             "labour_request",
         )
 
@@ -92,7 +97,7 @@ def labour_request(data: LabourRequestCreate, db=Depends(get_db), user=Depends(c
             ),
         })
 
-    return {"request_id": request.id, "matches": matches}
+    return {"request_id": request.id, "matches": matches, "status": request.status}
 
 
 @router.post("/offers")
@@ -146,6 +151,7 @@ def accept(offer_id: int, db=Depends(get_db), user=Depends(current_user)):
 @router.post("/requests/{request_id}/approve")
 def approve_labour_request(
     request_id: int,
+    payload: LabourApproveRequest | None = None,
     db=Depends(get_db),
     user=Depends(current_user),
 ):
@@ -154,13 +160,19 @@ def approve_labour_request(
         raise HTTPException(404, "Labour request not found")
 
     request.status = "approved"
+    request.accepted_by_user_id = user.id
+    c_note = payload.contractor_notes if (payload and payload.contractor_notes) else f"Accepted by contractor {user.name}. Workers will be provided on the specified day."
+    request.contractor_notes = c_note
+
+    start_fmt = request.start_date.strftime("%d %b %Y") if request.start_date else "the specified day"
     create_notification(
         db, request.farmer_id,
-        "Labour request approved!",
-        f"Contractor/Provider {user.name} approved your labour request for {request.work_type} ({request.workers_required} workers).",
+        "Labour Request Accepted by Contractor!",
+        f"Contractor {user.name} accepted your labour request for {request.work_type} ({request.workers_required} workers) on {start_fmt}. Workers will be provided on the specified day!",
         "labour_approved",
     )
     db.commit()
-    return {"request_id": request.id, "status": request.status}
+    return {"request_id": request.id, "status": request.status, "contractor_notes": request.contractor_notes}
+
 
 

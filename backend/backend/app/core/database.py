@@ -20,4 +20,12 @@ def get_db():
 
 def create_tables():
     from app.models import models  # noqa
+    from sqlalchemy import text
     Base.metadata.create_all(bind=engine)
+    with engine.connect() as conn:
+        for col, col_type in [("notes", "TEXT"), ("contractor_notes", "TEXT"), ("accepted_by_user_id", "INTEGER")]:
+            try:
+                conn.execute(text(f"ALTER TABLE labour_requests ADD COLUMN {col} {col_type}"))
+                conn.commit()
+            except Exception:
+                pass

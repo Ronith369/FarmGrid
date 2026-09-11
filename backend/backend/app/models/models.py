@@ -166,7 +166,13 @@ class LabourRequest(Base):
     urgency = Column(Integer, default=0)
     preferred_provider_type = Column(String(30))
     status = Column(String(30), default="open")
+    notes = Column(Text, nullable=True)
+    contractor_notes = Column(Text, nullable=True)
+    accepted_by_user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
     created_at = Column(DateTime, default=now)
+
+    farmer = relationship("User", foreign_keys=[farmer_id])
+    accepted_by = relationship("User", foreign_keys=[accepted_by_user_id])
 
 
 class LabourOffer(Base):

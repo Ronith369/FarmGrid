@@ -55,18 +55,29 @@
 
 <div class="modal-bg" id="m-labour">
   <div class="modal">
-    <h3>Post a labour requirement</h3>
-    <div class="msub">Nearby contractors will get notified and can accept directly.</div>
-    <div class="field"><label>Type of work</label><select><option>Harvesting</option><option>Transplanting</option><option>Weeding</option><option>Spraying assistance</option><option>Loading / transport</option></select></div>
-    <div class="field"><label>Workers needed</label><input type="text" placeholder="e.g. 5"></div>
-    <div class="field"><label>Date needed</label><input type="date"></div>
-    <div class="field"><label>Notes for the contractor</label><textarea placeholder="e.g. 2-acre maize plot, half-day job"></textarea></div>
+    <h3>Request Labour from Contractor</h3>
+    <div class="msub">Specify the yield work and date needed (e.g. tomorrow). Contractors will review and accept your request.</div>
+    <div class="field"><label>Type of yield work</label>
+      <select id="labour-work-type">
+        <option value="Harvesting">Harvesting</option>
+        <option value="Paddy Transplanting">Paddy Transplanting</option>
+        <option value="Weeding & Land Clearing">Weeding &amp; Land Clearing</option>
+        <option value="Sowing & Seed Planting">Sowing &amp; Seed Planting</option>
+        <option value="Areca Nut Plucking">Areca Nut Plucking</option>
+        <option value="Crop Spraying Assistance">Crop Spraying Assistance</option>
+        <option value="Loading & Produce Transport">Loading &amp; Produce Transport</option>
+      </select>
+    </div>
+    <div class="field"><label>Workers needed (people)</label><input type="number" id="labour-workers-count" placeholder="e.g. 5" min="1"></div>
+    <div class="field"><label>Specified date needed</label><input type="date" id="labour-date-needed"></div>
+    <div class="field"><label>Notes for contractor / yield area</label><textarea id="labour-notes" placeholder="e.g. 2-acre maize plot harvest needed tomorrow morning"></textarea></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('m-labour')">Cancel</button>
-      <button class="btn btn-chili" onclick="closeModal('m-labour');toast('Requirement posted to nearby contractors')">Post requirement</button>
+      <button class="btn btn-chili" id="btn-post-labour">Request Labour</button>
     </div>
   </div>
 </div>
+
 
 <div id="toast"></div>
 <script src="api.js"></script>

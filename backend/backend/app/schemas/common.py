@@ -76,10 +76,15 @@ class LabourRequestCreate(BaseModel):
     work_type: str
     workers_required: int = Field(gt=0)
     start_date: datetime
-    duration_days: int = Field(gt=0)
-    region: str
-    urgency: int = Field(ge=0, le=10)
+    duration_days: int = Field(default=1, gt=0)
+    region: str = Field(default="Shivamogga")
+    urgency: int = Field(default=5, ge=0, le=10)
     preferred_provider_type: Optional[str] = None
+    notes: Optional[str] = None
+
+
+class LabourApproveRequest(BaseModel):
+    contractor_notes: Optional[str] = None
 
 
 class LabourOfferCreate(BaseModel):

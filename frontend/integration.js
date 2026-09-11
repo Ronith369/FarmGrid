@@ -6,21 +6,48 @@
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const money = n => n == null ? '—' : '₹' + Number(n).toLocaleString('en-IN');
   const fmt = d => d ? new Date(d).toLocaleString('en-IN', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'}) : '—';
+  const fmtDate = d => {
+    if(!d) return 'Tomorrow';
+    const dt = new Date(d);
+    if(isNaN(dt.getTime())) return 'Specified Day';
+    const today = new Date();
+    const tmr = new Date(today); tmr.setDate(tmr.getDate() + 1);
+    if(dt.toDateString() === tmr.toDateString()) return 'Tomorrow (' + dt.toLocaleDateString('en-IN', {day:'2-digit', month:'short'}) + ')';
+    return dt.toLocaleDateString('en-IN', {day:'2-digit', month:'short', year:'numeric'});
+  };
   const user = () => FG_AUTH.user;
   async function toastApi(fn, success){ try { const r = await fn(); toast(success); return r; } catch(e) { toast(e.message); throw e; } }
 
   async function farmerOverview(){
-    const [farms, resources, requests, orders] = await Promise.all([api('/farms'), api('/resources'), api('/requests'), api('/market/orders')]);
+    const [farms, resources, requests, orders, labourReqs] = await Promise.all([
+      api('/farms'), api('/resources'), api('/requests'), api('/market/orders'), api('/labour/requests')
+    ]);
     const cells = document.querySelectorAll('.bento .cell .k');
     if(cells[1]) cells[1].textContent = requests.length;
     if(cells[2]) cells[2].textContent = orders.length;
-    if(cells[3]) cells[3].textContent = '5';
+    
+    const confirmedCount = labourReqs.filter(r => r.status === 'approved' || r.status === 'matched').reduce((sum, r) => sum + r.workers_required, 0);
+    const totalLabourersRequested = labourReqs.reduce((sum, r) => sum + r.workers_required, 0);
+    if(cells[3]) cells[3].textContent = confirmedCount > 0 ? confirmedCount : (totalLabourersRequested || 0);
+
     const sub = document.querySelector('.tb-sub');
     if(sub && farms[0]) sub.textContent = `${farms[0].location} · ${farms[0].land_size_acres} acres · Live API connected`;
+    
     const wide = document.querySelectorAll('.bento .wide');
     if(wide[0]){
-      wide[0].innerHTML = '<div class="l" style="margin-bottom:10px;color:var(--cream);font-weight:600;">My latest requests</div>' +
+      wide[0].innerHTML = '<div class="l" style="margin-bottom:10px;color:var(--cream);font-weight:600;">My latest equipment requests</div>' +
         (requests.length ? requests.slice(0,4).map(r => `<div class="mini-row"><span>${esc(r.resource_type.toUpperCase())} · ${esc(r.crop)} (${esc(r.crop_stage||'stage')})</span><span class="tag ${r.status==='allocated'||r.status==='confirmed'?'tag-olive':'tag-marigold'}">${esc(r.status)} · ${r.priority?.total||75}/100</span></div>`).join('') : '<div class="mini-row"><span>No requests submitted yet</span></div>');
+    }
+
+    if(wide[1]){
+      wide[1].innerHTML = '<div class="l" style="margin-bottom:10px;color:var(--cream);font-weight:600;">My Labour Requests & Contractor Status</div>' +
+        (labourReqs.length ? labourReqs.slice(0,4).map(r => {
+          const isApproved = r.status === 'approved' || r.status === 'matched';
+          return `<div class="mini-row" style="display:flex;justify-content:space-between;align-items:center;">
+            <span>${esc(r.work_type)} (${r.workers_required} workers on ${fmtDate(r.start_date)})</span>
+            <span class="tag ${isApproved ? 'tag-olive' : 'tag-marigold'}">${isApproved ? 'Accepted by Contractor' : 'Pending Contractor'}</span>
+          </div>`;
+        }).join('') : '<div class="mini-row"><span>No labour requests posted yet. Click Labour Hiring tab to request workers.</span></div>');
     }
   }
 
@@ -45,11 +72,11 @@
     }
     if(wides[1]){
       const pendingLabour = labourReqs.filter(r => r.status !== 'approved' && r.status !== 'matched');
-      wides[1].innerHTML = '<div class="l" style="margin-bottom:10px;color:var(--cream);font-weight:600;">Incoming farmer labour requests</div>' +
+      wides[1].innerHTML = '<div class="l" style="margin-bottom:10px;color:var(--cream);font-weight:600;">Incoming farm owner labour requests</div>' +
         (pendingLabour.length ? pendingLabour.slice(0,4).map(r => `
           <div class="mini-row" style="display:flex;justify-content:space-between;align-items:center;">
-            <span>${esc(r.farmer_name)} · ${esc(r.work_type)} (${r.workers_required} workers)</span>
-            <button class="btn btn-primary small" data-approve-labour-dash="${r.id}" style="padding:2px 8px;font-size:11px;">Approve</button>
+            <span>${esc(r.farmer_name)} · ${esc(r.work_type)} (${r.workers_required} workers on ${fmtDate(r.start_date)})</span>
+            <button class="btn btn-primary small" data-approve-labour-dash="${r.id}" style="padding:2px 8px;font-size:11px;">Accept & Provide</button>
           </div>`).join('') : '<div class="mini-row"><span>No pending labour requests</span></div>');
 
       wides[1].querySelectorAll('[data-approve-labour-dash]').forEach(b => {
@@ -57,7 +84,7 @@
           const reqId = Number(b.dataset.approveLabourDash);
           try {
             await api(`/labour/requests/${reqId}/approve`, { method: 'POST' });
-            toast(`Labour request #${reqId} approved! Notification sent to farmer.`);
+            toast(`Labour request #${reqId} accepted! Workers assigned.`);
             await providerOverview();
           } catch(e) { toast(e.message); }
         };
@@ -291,25 +318,42 @@
 
     let html = '';
     if(requests.length){
-      html += '<div style="margin-bottom:12px;font-weight:600;color:var(--cream);">My Labour Hiring Requests</div>';
-      html += requests.map(r => `
-        <div class="list-row" style="margin-bottom:10px;">
+      html += '<div style="margin-bottom:12px;font-weight:600;color:var(--cream);">My Requested Labour Tasks</div>';
+      html += requests.map(r => {
+        const isApproved = r.status === 'approved' || r.status === 'matched';
+        const dateStr = fmtDate(r.start_date);
+        const notesStr = r.notes ? `<div style="font-size:12px;color:var(--text-dim);margin-top:4px;">📝 Field Notes: ${esc(r.notes)}</div>` : '';
+        const contractorDetail = isApproved 
+          ? `<div style="font-size:12px;color:#a8e6cf;margin-top:6px;background:rgba(40,167,69,0.15);padding:8px 10px;border-radius:6px;border:1px solid rgba(40,167,69,0.3);"><strong>Contractor ${esc(r.accepted_by_name || 'Agri Contractor')}</strong> accepted this request and will provide ${r.workers_required} workers on ${dateStr}.<br>${r.contractor_notes ? esc(r.contractor_notes) : ''}</div>`
+          : `<div style="font-size:12px;color:var(--text-dim);margin-top:4px;">Contractors in region have been notified. Contractor will review and accept to provide workers.</div>`;
+
+        return `
+        <div class="list-row" style="margin-bottom:12px;align-items:flex-start;">
           <div class="lic">👷</div>
           <div class="lbody">
-            <h4>${esc(r.work_type)} — ${r.workers_required} workers required</h4>
-            <p>${esc(r.region)} · needed ${fmt(r.start_date)}</p>
+            <h4>${esc(r.work_type)} — ${r.workers_required} workers requested</h4>
+            <p>Specified Date Needed: <strong>${dateStr}</strong> · Region: ${esc(r.region)}</p>
+            ${notesStr}
+            ${contractorDetail}
           </div>
-          <span class="tag ${r.status==='approved'||r.status==='matched'?'tag-olive':'tag-marigold'}">${esc(r.status==='approved'?'Approved by Provider':r.status)}</span>
-        </div>`).join('');
+          <div class="lstatus">
+            <span class="tag ${isApproved ? 'tag-olive' : 'tag-marigold'}">
+              ${isApproved ? '✅ Contractor Accepted' : '⏳ Pending Contractor'}
+            </span>
+          </div>
+        </div>`;
+      }).join('');
+    } else {
+      html += '<div class="fg-empty" style="margin-bottom:16px;">You have not requested any labour yet. Click "Request Labour" above to hire workers from contractors for your yield.</div>';
     }
 
-    html += '<div style="margin-top:20px;margin-bottom:12px;font-weight:600;color:var(--cream);">Available Labour Contractors & Crews</div>';
+    html += '<div style="margin-top:24px;margin-bottom:12px;font-weight:600;color:var(--cream);">Available Labour Contractors & Crews</div>';
     html += providers.map(p => `
       <div class="list-row">
         <div class="lic">👥</div>
-        <div class="lbody"><h4>${esc(p.name)}</h4><p>${esc(p.provider_type)} · ${p.workers_available} workers available · ${esc(p.region)} · ${money(p.daily_wage_per_worker)}/day</p></div>
+        <div class="lbody"><h4>${esc(p.name)}</h4><p>${esc(p.provider_type)} · ${p.workers_available} workers capacity · ${esc(p.region)} · ${money(p.daily_wage_per_worker)}/day</p></div>
         <span class="tag tag-olive">Available</span>
-      </div>`).join('') || '<div class="fg-empty">No labour providers registered yet. Use the hiring button above to post your requirement.</div>';
+      </div>`).join('') || '<div class="fg-empty">No contractors registered yet. Click "Request Labour" above to post your requirement.</div>';
 
     el.innerHTML = html;
   }
@@ -403,25 +447,42 @@
 
     let html = '';
     const openReqs = requests.filter(r => r.status !== 'approved' && r.status !== 'matched');
+    const approvedReqs = requests.filter(r => r.status === 'approved' || r.status === 'matched');
+
     if(openReqs.length){
-      html += '<div style="margin-bottom:12px;font-weight:600;color:var(--cream);">Incoming Farmer Labour Requests (Approve to Assign Crew)</div>';
+      html += '<div style="margin-bottom:12px;font-weight:600;color:var(--cream);">Incoming Farm Owner Labour Requests (Accept to Provide Workers)</div>';
       html += openReqs.map(r => `
-        <div class="list-row" style="margin-bottom:10px;">
+        <div class="list-row" style="margin-bottom:12px;align-items:flex-start;">
           <div class="lic">👷</div>
           <div class="lbody">
-            <h4>${esc(r.work_type)} — ${r.workers_required} workers required</h4>
-            <p>Farmer: ${esc(r.farmer_name)} · Region: ${esc(r.region)} · Needed date: ${fmt(r.start_date)}</p>
+            <h4>${esc(r.work_type)} — ${r.workers_required} workers requested</h4>
+            <p>Farm Owner: <strong>${esc(r.farmer_name)}</strong> · Specified Date Needed: <strong style="color:var(--marigold);">${fmtDate(r.start_date)}</strong> · Region: ${esc(r.region)}</p>
+            ${r.notes ? `<div style="font-size:12px;color:var(--text-dim);margin-top:4px;">📝 Farm Owner Note: ${esc(r.notes)}</div>` : ''}
           </div>
           <div class="lactions">
-            <button class="btn btn-primary small" data-approve-labour="${r.id}">Approve Request</button>
+            <button class="btn btn-primary small" data-approve-labour="${r.id}" data-work="${esc(r.work_type)}" data-workers="${r.workers_required}" data-date="${esc(fmtDate(r.start_date))}">Accept & Provide Workers</button>
           </div>
         </div>`).join('');
     } else {
-      html += '<div class="fg-empty" style="margin-bottom:16px;">No pending farmer labour requests currently.</div>';
+      html += '<div class="fg-empty" style="margin-bottom:16px;">No pending labour requests from farm owners currently.</div>';
+    }
+
+    if(approvedReqs.length){
+      html += '<div style="margin-top:20px;margin-bottom:12px;font-weight:600;color:var(--cream);">Accepted Jobs & Confirmed Worker Allocations</div>';
+      html += approvedReqs.map(r => `
+        <div class="list-row" style="margin-bottom:10px;align-items:flex-start;">
+          <div class="lic">✅</div>
+          <div class="lbody">
+            <h4>${esc(r.work_type)} — ${r.workers_required} workers assigned for ${esc(r.farmer_name)}</h4>
+            <p>Specified Date: <strong>${fmtDate(r.start_date)}</strong> · Status: <strong>Providing Workers</strong></p>
+            ${r.contractor_notes ? `<div style="font-size:12px;color:var(--text-dim);margin-top:2px;">Contractor Note: ${esc(r.contractor_notes)}</div>` : ''}
+          </div>
+          <span class="tag tag-olive">Confirmed & Scheduled</span>
+        </div>`).join('');
     }
 
     if(mineCrews.length){
-      html += '<div style="margin-top:20px;margin-bottom:12px;font-weight:600;color:var(--cream);">My Registered Labour Crews</div>';
+      html += '<div style="margin-top:24px;margin-bottom:12px;font-weight:600;color:var(--cream);">My Registered Labour Crews & Capacity</div>';
       html += mineCrews.map(p => `
         <div class="list-row">
           <div class="lic">👥</div>
@@ -435,9 +496,18 @@
     rows.querySelectorAll('[data-approve-labour]').forEach(b => {
       b.onclick = async () => {
         const reqId = Number(b.dataset.approveLabour);
+        const workType = b.dataset.work || 'yield work';
+        const reqDateStr = b.dataset.date || 'the specified date';
+        
+        const note = prompt(`Enter optional confirmation / supervisor note for farm owner (e.g. Crew assigned for ${workType} on ${reqDateStr}):`, `Crew assigned and ready for ${workType} on ${reqDateStr}.`);
+        if(note === null) return; // user cancelled
+
         try {
-          await api(`/labour/requests/${reqId}/approve`, { method: 'POST' });
-          toast(`Farmer labour request #${reqId} approved & confirmed! Notification sent to farmer.`);
+          await api(`/labour/requests/${reqId}/approve`, {
+            method: 'POST',
+            body: { contractor_notes: note }
+          });
+          toast(`Request #${reqId} accepted! Workers confirmed for ${reqDateStr}. Notification sent to farm owner.`);
           await providerLabour();
         } catch(e) { toast(e.message); }
       };
@@ -447,20 +517,50 @@
   async function farmerLabourForm(){
     const modal = document.getElementById('m-labour');
     if(!modal) return;
-    const fields = modal.querySelectorAll('input,select,textarea');
-    const work = fields[0], workers = fields[1], date = fields[2];
-    const btn = modal.querySelector('.btn-chili');
+    
+    // Auto set date input to Tomorrow by default
+    const dateInput = document.getElementById('labour-date-needed');
+    if(dateInput && !dateInput.value){
+      const tmr = new Date(); tmr.setDate(tmr.getDate() + 1);
+      const year = tmr.getFullYear();
+      const month = String(tmr.getMonth() + 1).padStart(2, '0');
+      const day = String(tmr.getDate()).padStart(2, '0');
+      dateInput.value = `${year}-${month}-${day}`;
+    }
+
+    const btn = document.getElementById('btn-post-labour');
     if(btn){
       btn.onclick = async () => {
-        const n = Number(workers.value);
-        if(!n || !date.value){ toast('Enter workers needed and date'); return; }
+        const workType = document.getElementById('labour-work-type')?.value || 'Harvesting';
+        const workers = Number(document.getElementById('labour-workers-count')?.value || 5);
+        const dateVal = document.getElementById('labour-date-needed')?.value;
+        const notes = document.getElementById('labour-notes')?.value || '';
+
+        if(!workers || workers <= 0){ toast('Enter number of workers needed'); return; }
+
+        let reqDate;
+        if(dateVal){
+          reqDate = new Date(dateVal + 'T08:00:00').toISOString();
+        } else {
+          const tmr = new Date(); tmr.setDate(tmr.getDate() + 1);
+          reqDate = tmr.toISOString();
+        }
+
         try {
           const r = await api('/labour/requests', {
             method: 'POST',
-            body: { work_type: work.value, workers_required: n, start_date: new Date(date.value + 'T08:00:00').toISOString(), duration_days: 1, region: 'Shivamogga', urgency: 8 }
+            body: {
+              work_type: workType,
+              workers_required: workers,
+              start_date: reqDate,
+              duration_days: 1,
+              region: 'Shivamogga',
+              urgency: 8,
+              notes: notes
+            }
           });
           closeModal('m-labour');
-          toast(`Labour requirement #${r.request_id} posted · providers notified for approval`);
+          toast(`Labour request #${r.request_id} submitted for ${fmtDate(reqDate)}! Contractors notified for acceptance.`);
           await farmerLabour();
         } catch(e) { toast(e.message); }
       };
