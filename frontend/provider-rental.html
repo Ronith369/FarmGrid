@@ -1,175 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Equipment · Kheti Sahayak</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Equipment · ಕೃಷಿ ಮಿತ್ರ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<div class="app">
-  <aside class="sidebar">
-  <div class="sb-brand"><div class="brand-mark"></div><div><div class="sb-brand-name">Kheti Sahayak</div><div class="sb-role-tag">Provider dashboard</div></div></div>
-  <nav class="sb-nav">
-  <a class="sb-link" href="provider-overview.html"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Overview</a>
-<a class="sb-link active" href="provider-rental.html"><svg class="ic" viewBox="0 0 24 24"><circle cx="7" cy="17" r="2.5"/><circle cx="17" cy="17" r="2.5"/><path d="M9.5 17h5M4 17 5 9h5l3 4h4l2 4M9 9V6h3"/></svg>My Equipment</a>
-<a class="sb-link" href="provider-labour.html"><svg class="ic" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="8" r="2.4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M17 13a4 4 0 0 1 4 4v1"/></svg>Labour Hiring<span class="badge">4</span></a>
-<a class="sb-link" href="provider-selling.html"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>Crop Requirements</a>
-
-  </nav>
-  <div class="sb-foot">
-    <div class="sb-user"><div class="sb-avatar" style="background:var(--marigold);color:var(--marigold-ink);">SN</div><div><div class="un">Suresh &amp; Nagaraj Agri</div><div class="ul">Equipment &amp; labour contractor</div></div></div>
-    <div class="sb-switch"><svg class="ic" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>Switch role — <a href="login.html?role=farmer&next=farmer-overview.html">go to Farmer</a></span></div>
-  </div>
-</aside>
-  <div class="main">
-    <div class="topbar">
-      <div style="display:flex;align-items:center;gap:14px;">
-        <button class="hamburger tb-icon-btn" id="hamburger"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-        <div><div class="tb-title">My Equipment</div><div class="tb-sub">Listings, bookings and the FarmGrid master schedule</div></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sb-brand">
+        <div class="brand-mark"></div>
+        <div>
+          <div class="sb-brand-name">ಕೃಷಿ ಮಿತ್ರ</div>
+          <div class="sb-role-tag">Provider dashboard</div>
+        </div>
       </div>
-      <div class="tb-right"><button class="tb-icon-btn" title="Notifications"><svg class="ic" viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 4 1.5 5.5 2 6.5H4C4.5 13.5 6 12 6 8Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg><span class="dot"></span></button></div>
-    </div>
-    <div class="content">
+      <nav class="sb-nav">
+        <a class="sb-link" href="provider-overview.html"><svg class="ic" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="7" height="9" />
+            <rect x="14" y="3" width="7" height="5" />
+            <rect x="14" y="12" width="7" height="9" />
+            <rect x="3" y="16" width="7" height="5" />
+          </svg>Overview</a>
+        <a class="sb-link active" href="provider-rental.html"><svg class="ic" viewBox="0 0 24 24">
+            <circle cx="7" cy="17" r="2.5" />
+            <circle cx="17" cy="17" r="2.5" />
+            <path d="M9.5 17h5M4 17 5 9h5l3 4h4l2 4M9 9V6h3" />
+          </svg>My Equipment</a>
+        <a class="sb-link" href="provider-labour.html"><svg class="ic" viewBox="0 0 24 24">
+            <circle cx="9" cy="7" r="3" />
+            <circle cx="17" cy="8" r="2.4" />
+            <path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2" />
+            <path d="M17 13a4 4 0 0 1 4 4v1" />
+          </svg>Labour Hiring<span class="badge">4</span></a>
+        <a class="sb-link" href="provider-selling.html"><svg class="ic" viewBox="0 0 24 24">
+            <path d="M3 7h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z" />
+            <path d="M8 7V5a4 4 0 0 1 8 0v2" />
+          </svg>Crop Requirements</a>
 
-<div class="section-head">
-  <div><h2>My Equipment</h2><p>Everything you've listed, who's booked what, and the live coordination engine behind it.</p></div>
-  <button class="btn btn-primary" onclick="openModal('m-equip')"><svg class="ic" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M12 5v14M5 12h14"/></svg>List new equipment</button>
-</div>
+      </nav>
+      <div class="sb-foot">
+        <div class="sb-user">
+          <div class="sb-avatar" style="background:var(--marigold);color:var(--marigold-ink);">SN</div>
+          <div>
+            <div class="un">Suresh &amp; Nagaraj Agri</div>
+            <div class="ul">Equipment &amp; labour contractor</div>
+          </div>
+        </div>
+        <div class="sb-switch"><svg class="ic" viewBox="0 0 24 24" style="width:15px;height:15px">
+            <path d="M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3" />
+          </svg><span>Switch role — <a href="login.html?role=farmer&next=farmer-overview.html">go to Farmer</a></span>
+        </div>
+      </div>
+    </aside>
+    <div class="main">
+      <div class="topbar">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <button class="hamburger tb-icon-btn" id="hamburger"><svg class="ic" viewBox="0 0 24 24">
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg></button>
+          <div>
+            <div class="tb-title">My Equipment</div>
+            <div class="tb-sub">Listings, bookings and the FarmGrid master schedule</div>
+          </div>
+        </div>
+        <div class="tb-right"><button class="tb-icon-btn" title="Notifications"><svg class="ic" viewBox="0 0 24 24">
+              <path d="M6 8a6 6 0 1 1 12 0c0 4 1.5 5.5 2 6.5H4C4.5 13.5 6 12 6 8Z" />
+              <path d="M10 19a2 2 0 0 0 4 0" />
+            </svg><span class="dot"></span></button></div>
+      </div>
+      <div class="content">
 
-<div class="tabs">
-  <button class="tab-btn active" onclick="pgSwitchTab(this,'equip')">My Equipment</button>
-  <button class="tab-btn" onclick="pgSwitchTab(this,'sched')">Master Schedule</button>
-</div>
+        <div class="section-head">
+          <div>
+            <h2>My Equipment</h2>
+            <p>Everything you've listed, who's booked what, and the live coordination engine behind it.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('m-equip')"><svg class="ic" viewBox="0 0 24 24"
+              style="width:16px;height:16px">
+              <path d="M12 5v14M5 12h14" />
+            </svg>List new equipment</button>
+        </div>
 
-<div id="tab-equip">
-  <div class="row-list" id="equip-list"></div>
-</div>
+        <div class="tabs">
+          <button class="tab-btn active" onclick="pgSwitchTab(this,'equip')">My Equipment</button>
+          <button class="tab-btn" onclick="pgSwitchTab(this,'sched')">Master Schedule</button>
+        </div>
 
-<div id="tab-sched" style="display:none">
-  <div class="bento" id="sched-bento" style="grid-template-columns:repeat(4,1fr);"></div>
-  <div id="sched-groups"></div>
-</div>
+        <div id="tab-equip">
+          <div class="row-list" id="equip-list"></div>
+        </div>
 
+        <div id="tab-sched" style="display:none">
+          <div class="bento" id="sched-bento" style="grid-template-columns:repeat(4,1fr);"></div>
+          <div id="sched-groups"></div>
+        </div>
+
+      </div>
     </div>
   </div>
-</div>
 
-<div class="modal-bg" id="m-equip">
-  <div class="modal">
-    <h3>List new equipment</h3>
-    <div class="msub">Your listing goes live on the Rental Equipment tab for farmers nearby.</div>
-    <div class="field"><label>Equipment name</label><input type="text" placeholder="e.g. Mahindra 575 DI Tractor"></div>
-    <div class="field"><label>Category</label><select><option>Tractor</option><option>Harvester</option><option>Tiller / Rotavator</option><option>Sprayer</option><option>Seed drill</option></select></div>
-    <div class="field"><label>Rate per day</label><input type="text" placeholder="e.g. ₹1,800/day"></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('m-equip')">Cancel</button>
-      <button class="btn btn-primary" onclick="closeModal('m-equip');toast('Equipment listed and now visible to farmers')">List equipment</button>
+  <div class="modal-bg" id="m-equip">
+    <div class="modal">
+      <h3>List new equipment</h3>
+      <div class="msub">Your listing goes live on the Rental Equipment tab for farmers nearby.</div>
+      <div class="field"><label>Equipment name</label><input type="text" placeholder="e.g. Mahindra 575 DI Tractor">
+      </div>
+      <div class="field"><label>Category</label><select>
+          <option>Tractor</option>
+          <option>Harvester</option>
+          <option>Tiller / Rotavator</option>
+          <option>Sprayer</option>
+          <option>Seed drill</option>
+        </select></div>
+      <div class="field"><label>Rate per day</label><input type="text" placeholder="e.g. ₹1,800/day"></div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal('m-equip')">Cancel</button>
+        <button class="btn btn-primary"
+          onclick="closeModal('m-equip');toast('Equipment listed and now visible to farmers')">List equipment</button>
+      </div>
     </div>
   </div>
-</div>
 
-<div id="toast"></div>
-<script src="api.js"></script>
-<script src="script.js"></script>
-<script src="farmgrid.js"></script>
-<script>
-var MY_OWNER = 'Suresh & Nagaraj Agri';
-var statusLabel = {pending:'Pending review', assigned:'Assigned', queued:'Queued', disrupted:'Reallocating…', reassigned:'Reassigned', cancelled:'Cancelled'};
-var statusTagClass = {assigned:'tag-olive', queued:'tag-marigold', pending:'tag-muted', disrupted:'tag-chili', reassigned:'tag-olive', cancelled:'tag-muted'};
+  <div id="toast"></div>
+  <script src="api.js"></script>
+  <script src="script.js"></script>
+  <script src="farmgrid.js"></script>
+  <script>
+    var MY_OWNER = 'Suresh & Nagaraj Agri';
+    var statusLabel = { pending: 'Pending review', assigned: 'Assigned', queued: 'Queued', disrupted: 'Reallocating…', reassigned: 'Reassigned', cancelled: 'Cancelled' };
+    var statusTagClass = { assigned: 'tag-olive', queued: 'tag-marigold', pending: 'tag-muted', disrupted: 'tag-chili', reassigned: 'tag-olive', cancelled: 'tag-muted' };
 
-function pgSwitchTab(btn, tab){
-  var tabs = btn.parentElement.querySelectorAll('.tab-btn');
-  tabs.forEach(function(t){ t.classList.remove('active'); });
-  btn.classList.add('active');
-  document.getElementById('tab-equip').style.display = tab==='equip' ? 'block' : 'none';
-  document.getElementById('tab-sched').style.display = tab==='sched' ? 'block' : 'none';
-  if(tab==='sched') renderSchedule();
-}
+    function pgSwitchTab(btn, tab) {
+      var tabs = btn.parentElement.querySelectorAll('.tab-btn');
+      tabs.forEach(function (t) { t.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('tab-equip').style.display = tab === 'equip' ? 'block' : 'none';
+      document.getElementById('tab-sched').style.display = tab === 'sched' ? 'block' : 'none';
+      if (tab === 'sched') renderSchedule();
+    }
 
-function icon(){ return '<circle cx="7" cy="17" r="2.5"/><circle cx="17" cy="17" r="2.5"/><path d="M9.5 17h5M4 17 5 9h5l3 4h4l2 4M9 9V6h3"/>'; }
+    function icon() { return '<circle cx="7" cy="17" r="2.5"/><circle cx="17" cy="17" r="2.5"/><path d="M9.5 17h5M4 17 5 9h5l3 4h4l2 4M9 9V6h3"/>'; }
 
-function renderEquipList(){
-  var el = document.getElementById('equip-list');
-  el.innerHTML = FG_RESOURCES.filter(function(r){ return r.owner===MY_OWNER; }).map(function(r){
-    var group = (FG_groupByResource()[r.id]||[]).filter(function(q){return q.status==='assigned' || q.status==='queued';});
-    var lead = group.filter(function(q){return q.status==='assigned';})[0];
-    var statusTxt = r.status==='breakdown' ? 'Under maintenance' : (lead ? 'Booked by '+lead.farmer+' · '+lead.start+' → '+lead.end : (group.length ? group.length+' request(s) queued' : 'Available'));
-    return '<div class="list-row"><div class="lic"><svg class="ic" viewBox="0 0 24 24">'+icon()+'</svg></div>'+
-      '<div class="lbody"><h4>'+r.name+'</h4><p>'+r.rate+' · '+statusTxt+'</p></div>'+
-      '<div class="lstatus">'+(r.status==='breakdown'?'<span class="tag tag-chili">Breakdown</span>':(lead?'<span class="tag tag-olive">On rent</span>':(group.length?'<span class="tag tag-marigold">Queue</span>':'<span class="tag tag-muted">Available</span>')))+'</div>'+
-      '</div>';
-  }).join('');
-}
+    function renderEquipList() {
+      var el = document.getElementById('equip-list');
+      el.innerHTML = FG_RESOURCES.filter(function (r) { return r.owner === MY_OWNER; }).map(function (r) {
+        var group = (FG_groupByResource()[r.id] || []).filter(function (q) { return q.status === 'assigned' || q.status === 'queued'; });
+        var lead = group.filter(function (q) { return q.status === 'assigned'; })[0];
+        var statusTxt = r.status === 'breakdown' ? 'Under maintenance' : (lead ? 'Booked by ' + lead.farmer + ' · ' + lead.start + ' → ' + lead.end : (group.length ? group.length + ' request(s) queued' : 'Available'));
+        return '<div class="list-row"><div class="lic"><svg class="ic" viewBox="0 0 24 24">' + icon() + '</svg></div>' +
+          '<div class="lbody"><h4>' + r.name + '</h4><p>' + r.rate + ' · ' + statusTxt + '</p></div>' +
+          '<div class="lstatus">' + (r.status === 'breakdown' ? '<span class="tag tag-chili">Breakdown</span>' : (lead ? '<span class="tag tag-olive">On rent</span>' : (group.length ? '<span class="tag tag-marigold">Queue</span>' : '<span class="tag tag-muted">Available</span>'))) + '</div>' +
+          '</div>';
+      }).join('');
+    }
 
-function renderSchedule(){
-  var groups = FG_groupByResource();
-  var totalReq = FG_REQUESTS.filter(function(r){return r.status!=='cancelled';}).length;
-  var conflictCount = Object.keys(groups).filter(function(rid){ return FG_hasOverlapConflict(rid); }).length;
-  var scores = FG_REQUESTS.map(function(r){ return FG_score(r).total; });
-  var avg = scores.length ? Math.round(scores.reduce(function(a,b){return a+b;},0)/scores.length) : 0;
+    function renderSchedule() {
+      var groups = FG_groupByResource();
+      var totalReq = FG_REQUESTS.filter(function (r) { return r.status !== 'cancelled'; }).length;
+      var conflictCount = Object.keys(groups).filter(function (rid) { return FG_hasOverlapConflict(rid); }).length;
+      var scores = FG_REQUESTS.map(function (r) { return FG_score(r).total; });
+      var avg = scores.length ? Math.round(scores.reduce(function (a, b) { return a + b; }, 0) / scores.length) : 0;
 
-  document.getElementById('sched-bento').innerHTML =
-    '<div class="cell"><div class="k">'+totalReq+'</div><div class="l">Open requests</div></div>'+
-    '<div class="cell"><div class="k">'+conflictCount+'</div><div class="l">Resources with conflicts</div></div>'+
-    '<div class="cell accent"><div class="k">'+avg+'</div><div class="l">Average priority score</div></div>'+
-    '<div class="cell"><div class="k">'+FG_OFFLINE_QUEUE.length+'</div><div class="l">Queued offline (farmer side)</div></div>';
+      document.getElementById('sched-bento').innerHTML =
+        '<div class="cell"><div class="k">' + totalReq + '</div><div class="l">Open requests</div></div>' +
+        '<div class="cell"><div class="k">' + conflictCount + '</div><div class="l">Resources with conflicts</div></div>' +
+        '<div class="cell accent"><div class="k">' + avg + '</div><div class="l">Average priority score</div></div>' +
+        '<div class="cell"><div class="k">' + FG_OFFLINE_QUEUE.length + '</div><div class="l">Queued offline (farmer side)</div></div>';
 
-  var html = '';
-  Object.keys(groups).forEach(function(rid){
-    var res = FG_RESOURCES.filter(function(r){return r.id===rid;})[0];
-    var group = groups[rid].slice();
-    group.forEach(function(r){ r._score = FG_score(r); });
-    group.sort(function(a,b){ return b._score.total - a._score.total; });
-    var conflict = FG_hasOverlapConflict(rid, group);
+      var html = '';
+      Object.keys(groups).forEach(function (rid) {
+        var res = FG_RESOURCES.filter(function (r) { return r.id === rid; })[0];
+        var group = groups[rid].slice();
+        group.forEach(function (r) { r._score = FG_score(r); });
+        group.sort(function (a, b) { return b._score.total - a._score.total; });
+        var conflict = FG_hasOverlapConflict(rid, group);
 
-    html += '<div class="fg-group-head"><h3>'+res.name+'</h3>'+
-      (res.status==='breakdown' ? '<span class="tag tag-chili">Under maintenance</span>' : (conflict ? '<span class="tag tag-chili">Conflict — '+group.length+' competing requests</span>' : '<span class="tag tag-olive">No conflict</span>'))+
-      '<div style="margin-left:auto;display:flex;gap:8px;">'+
-        (res.status!=='breakdown' ? '<button class="btn btn-chili small" onclick="pgBreakdown(\''+rid+'\')">⚠ Report breakdown</button>' : '<span class="meta">Reallocation triggered — see log below</span>')+
-      '</div></div>';
+        html += '<div class="fg-group-head"><h3>' + res.name + '</h3>' +
+          (res.status === 'breakdown' ? '<span class="tag tag-chili">Under maintenance</span>' : (conflict ? '<span class="tag tag-chili">Conflict — ' + group.length + ' competing requests</span>' : '<span class="tag tag-olive">No conflict</span>')) +
+          '<div style="margin-left:auto;display:flex;gap:8px;">' +
+          (res.status !== 'breakdown' ? '<button class="btn btn-chili small" onclick="pgBreakdown(\'' + rid + '\')">⚠ Report breakdown</button>' : '<span class="meta">Reallocation triggered — see log below</span>') +
+          '</div></div>';
 
-    group.forEach(function(r, idx){
-      var tier = FG_scoreTier(r._score.total);
-      html += '<div class="fg-card"><div class="fg-card-top"><div><h4>'+r.farmer+' '+(idx===0?'<span class="tag tag-olive" style="margin-left:6px;">Top priority</span>':'')+'</h4>'+
-        '<div class="meta">'+r.start+' → '+r.end+' · '+r.durationHrs+'h · '+r.cropStage+' stage</div>'+
-        '<div class="meta">"'+r.urgency+'"</div></div>'+
-        '<div class="fg-card-right">'+
-        '<span class="tag '+(statusTagClass[r.status]||'tag-muted')+'">'+(statusLabel[r.status]||r.status)+'</span>'+
-        '<span class="score-pill '+tier+'">'+r._score.total+'/100</span>'+
-        '<span class="fg-explain-toggle" onclick="fgToggleBreakdown(this)">Why this rank? ▾</span>'+
-        '</div></div>'+
-        '<div class="fg-breakdown">'+ r._score.factors.map(function(f){
-          return '<div class="fg-factor"><span class="fname">'+f.label+'</span><div class="fbar-track"><div class="fbar-fill" style="width:'+(100*f.pts/f.max)+'%"></div></div><span class="fpts">'+f.pts+'/'+f.max+'</span></div>';
-        }).join('') +
-        '<div class="fg-explain-text">'+ r._score.factors.map(function(f){return f.note;}).join(' · ') +'</div></div>'+
-        '</div>';
-    });
-  });
-  document.getElementById('sched-groups').innerHTML = html || '<div class="fg-empty">No requests in the system yet.</div>';
+        group.forEach(function (r, idx) {
+          var tier = FG_scoreTier(r._score.total);
+          html += '<div class="fg-card"><div class="fg-card-top"><div><h4>' + r.farmer + ' ' + (idx === 0 ? '<span class="tag tag-olive" style="margin-left:6px;">Top priority</span>' : '') + '</h4>' +
+            '<div class="meta">' + r.start + ' → ' + r.end + ' · ' + r.durationHrs + 'h · ' + r.cropStage + ' stage</div>' +
+            '<div class="meta">"' + r.urgency + '"</div></div>' +
+            '<div class="fg-card-right">' +
+            '<span class="tag ' + (statusTagClass[r.status] || 'tag-muted') + '">' + (statusLabel[r.status] || r.status) + '</span>' +
+            '<span class="score-pill ' + tier + '">' + r._score.total + '/100</span>' +
+            '<span class="fg-explain-toggle" onclick="fgToggleBreakdown(this)">Why this rank? ▾</span>' +
+            '</div></div>' +
+            '<div class="fg-breakdown">' + r._score.factors.map(function (f) {
+              return '<div class="fg-factor"><span class="fname">' + f.label + '</span><div class="fbar-track"><div class="fbar-fill" style="width:' + (100 * f.pts / f.max) + '%"></div></div><span class="fpts">' + f.pts + '/' + f.max + '</span></div>';
+            }).join('') +
+            '<div class="fg-explain-text">' + r._score.factors.map(function (f) { return f.note; }).join(' · ') + '</div></div>' +
+            '</div>';
+        });
+      });
+      document.getElementById('sched-groups').innerHTML = html || '<div class="fg-empty">No requests in the system yet.</div>';
 
-  html = '<div class="fg-group-head"><h3>Activity &amp; decision log</h3><button class="btn btn-ghost small" onclick="FG_triggerRainAlert();renderSchedule();toast(\'Rain alert issued district-wide\')" style="margin-left:auto;">🌧 Trigger rain alert</button></div>';
-  html += FG_ACTIVITY.length ? FG_ACTIVITY.slice(0,15).map(function(a){ return '<div class="fg-activity">'+a.msg+'<div class="fa-time">'+a.at.toLocaleString()+'</div></div>'; }).join('') : '<div class="fg-empty">No activity yet.</div>';
-  document.getElementById('sched-groups').innerHTML += html;
-}
+      html = '<div class="fg-group-head"><h3>Activity &amp; decision log</h3><button class="btn btn-ghost small" onclick="FG_triggerRainAlert();renderSchedule();toast(\'Rain alert issued district-wide\')" style="margin-left:auto;">🌧 Trigger rain alert</button></div>';
+      html += FG_ACTIVITY.length ? FG_ACTIVITY.slice(0, 15).map(function (a) { return '<div class="fg-activity">' + a.msg + '<div class="fa-time">' + a.at.toLocaleString() + '</div></div>'; }).join('') : '<div class="fg-empty">No activity yet.</div>';
+      document.getElementById('sched-groups').innerHTML += html;
+    }
 
-function fgToggleBreakdown(el){
-  var card = el.closest('.fg-card');
-  card.querySelector('.fg-breakdown').classList.toggle('show');
-  el.textContent = card.querySelector('.fg-breakdown').classList.contains('show') ? 'Hide breakdown ▴' : 'Why this rank? ▾';
-}
+    function fgToggleBreakdown(el) {
+      var card = el.closest('.fg-card');
+      card.querySelector('.fg-breakdown').classList.toggle('show');
+      el.textContent = card.querySelector('.fg-breakdown').classList.contains('show') ? 'Hide breakdown ▴' : 'Why this rank? ▾';
+    }
 
-function pgBreakdown(resourceId){
-  FG_simulateDisruption(resourceId);
-  toast('Breakdown reported — FarmGrid recalculated and reassigned affected requests');
-  renderEquipList();
-  renderSchedule();
-}
+    function pgBreakdown(resourceId) {
+      FG_simulateDisruption(resourceId);
+      toast('Breakdown reported — FarmGrid recalculated and reassigned affected requests');
+      renderEquipList();
+      renderSchedule();
+    }
 
-renderEquipList();
-</script>
-<script src="integration.js"></script>
+    renderEquipList();
+  </script>
+  <script src="integration.js"></script>
 </body>
+
 </html>

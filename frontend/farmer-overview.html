@@ -1,64 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Overview · Kheti Sahayak</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Overview · ಕೃಷಿ ಮಿತ್ರ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<div class="app">
-  <aside class="sidebar">
-  <div class="sb-brand"><div class="brand-mark"></div><div><div class="sb-brand-name">Kheti Sahayak</div><div class="sb-role-tag">Farmer dashboard</div></div></div>
-  <nav class="sb-nav">
-  <a class="sb-link active" href="farmer-overview.html"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Overview</a>
-<a class="sb-link" href="farmer-rental.html"><svg class="ic" viewBox="0 0 24 24"><circle cx="7" cy="17" r="2.5"/><circle cx="17" cy="17" r="2.5"/><path d="M9.5 17h5M4 17 5 9h5l3 4h4l2 4M9 9V6h3"/></svg>Rental Equipment</a>
-<a class="sb-link" href="farmer-nutrition.html"><svg class="ic" viewBox="0 0 24 24"><path d="M12 21c-4-2-8-6-8-11a8 8 0 0 1 16 0c0 5-4 9-8 11Z"/><path d="M12 10v7"/></svg>Nutrition &amp; Protection</a>
-<a class="sb-link" href="farmer-selling.html"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>Crop Selling<span class="badge">12</span></a>
-<a class="sb-link" href="farmer-labour.html"><svg class="ic" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="8" r="2.4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M17 13a4 4 0 0 1 4 4v1"/></svg>Labour Hiring</a>
-
-  </nav>
-  <div class="sb-foot">
-    <div class="sb-user"><div class="sb-avatar">RG</div><div><div class="un">Ravi Gowda</div><div class="ul">Sagar Taluk, 4.2 acres</div></div></div>
-    <div class="sb-switch"><svg class="ic" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>Switch role — <a href="login.html?role=resource_owner&next=provider-overview.html">go to Provider</a></span></div>
-  </div>
-</aside>
-  <div class="main">
-    <div class="topbar">
-      <div style="display:flex;align-items:center;gap:14px;">
-        <button class="hamburger tb-icon-btn" id="hamburger"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-        <div><div class="tb-title">Overview</div><div class="tb-sub">Wednesday · Sagar, Shivamogga — 26°C, light rain expected</div></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sb-brand">
+        <div class="brand-mark"></div>
+        <div>
+          <div class="sb-brand-name">ಕೃಷಿ ಮಿತ್ರ</div>
+          <div class="sb-role-tag">Farmer dashboard</div>
+        </div>
       </div>
-      <div class="tb-right"><button class="tb-icon-btn" title="Notifications"><svg class="ic" viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 4 1.5 5.5 2 6.5H4C4.5 13.5 6 12 6 8Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg><span class="dot"></span></button></div>
-    </div>
-    <div class="content">
-      
-<div class="bento">
-  <div class="cell accent"><div class="k">₹8,400</div><div class="l">Rental spend this month</div></div>
-  <div class="cell"><div class="k">2</div><div class="l">Machines booked — Rotavator, Sprayer drone</div></div>
-  <div class="cell"><div class="k">3</div><div class="l">Buyer requirements matching your maize crop</div></div>
-  <div class="cell"><div class="k">5</div><div class="l">Labourers confirmed for Saturday's harvest</div></div>
-  <div class="cell wide">
-    <div class="l" style="margin-bottom:10px;color:var(--cream);font-weight:600;">Active rentals</div>
-    <div class="mini-row"><span>Mahindra 575 DI Tractor</span><span class="tag tag-marigold">Returns in 2 days</span></div>
-    <div class="mini-row"><span>Boom Sprayer Drone</span><span class="tag tag-olive">Delivered today</span></div>
-  </div>
-  <div class="cell wide">
-    <div class="l" style="margin-bottom:10px;color:var(--cream);font-weight:600;">Recommended for your maize plot</div>
-    <div class="mini-row"><span>NPK 19:19:19, 50kg</span><span class="tag tag-olive">In season</span></div>
-    <div class="mini-row"><span>ITC Foods — maize buy request</span><span class="tag tag-chili">Closes in 4 days</span></div>
-  </div>
-</div>
+      <nav class="sb-nav">
+        <a class="sb-link active" href="farmer-overview.html"><svg class="ic" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="7" height="9" />
+            <rect x="14" y="3" width="7" height="5" />
+            <rect x="14" y="12" width="7" height="9" />
+            <rect x="3" y="16" width="7" height="5" />
+          </svg>Overview</a>
+        <a class="sb-link" href="farmer-rental.html"><svg class="ic" viewBox="0 0 24 24">
+            <circle cx="7" cy="17" r="2.5" />
+            <circle cx="17" cy="17" r="2.5" />
+            <path d="M9.5 17h5M4 17 5 9h5l3 4h4l2 4M9 9V6h3" />
+          </svg>Rental Equipment</a>
+        <a class="sb-link" href="farmer-nutrition.html"><svg class="ic" viewBox="0 0 24 24">
+            <path d="M12 21c-4-2-8-6-8-11a8 8 0 0 1 16 0c0 5-4 9-8 11Z" />
+            <path d="M12 10v7" />
+          </svg>Nutrition &amp; Protection</a>
+        <a class="sb-link" href="farmer-selling.html"><svg class="ic" viewBox="0 0 24 24">
+            <path d="M3 7h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z" />
+            <path d="M8 7V5a4 4 0 0 1 8 0v2" />
+          </svg>Crop Selling<span class="badge">12</span></a>
+        <a class="sb-link" href="farmer-labour.html"><svg class="ic" viewBox="0 0 24 24">
+            <circle cx="9" cy="7" r="3" />
+            <circle cx="17" cy="8" r="2.4" />
+            <path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2" />
+            <path d="M17 13a4 4 0 0 1 4 4v1" />
+          </svg>Labour Hiring</a>
 
+      </nav>
+      <div class="sb-foot">
+        <div class="sb-user">
+          <div class="sb-avatar">RG</div>
+          <div>
+            <div class="un">Ravi Gowda</div>
+            <div class="ul">Sagar Taluk, 4.2 acres</div>
+          </div>
+        </div>
+        <div class="sb-switch"><svg class="ic" viewBox="0 0 24 24" style="width:15px;height:15px">
+            <path d="M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3" />
+          </svg><span>Switch role — <a href="login.html?role=resource_owner&next=provider-overview.html">go to
+              Provider</a></span></div>
+      </div>
+    </aside>
+    <div class="main">
+      <div class="topbar">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <button class="hamburger tb-icon-btn" id="hamburger"><svg class="ic" viewBox="0 0 24 24">
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg></button>
+          <div>
+            <div class="tb-title">Overview</div>
+            <div class="tb-sub">Wednesday · Sagar, Shivamogga — 26°C, light rain expected</div>
+          </div>
+        </div>
+        <div class="tb-right"><button class="tb-icon-btn" title="Notifications"><svg class="ic" viewBox="0 0 24 24">
+              <path d="M6 8a6 6 0 1 1 12 0c0 4 1.5 5.5 2 6.5H4C4.5 13.5 6 12 6 8Z" />
+              <path d="M10 19a2 2 0 0 0 4 0" />
+            </svg><span class="dot"></span></button></div>
+      </div>
+      <div class="content">
+
+        <div class="bento">
+          <div class="cell accent">
+            <div class="k">₹8,400</div>
+            <div class="l">Rental spend this month</div>
+          </div>
+          <div class="cell">
+            <div class="k">2</div>
+            <div class="l">Machines booked — Rotavator, Sprayer drone</div>
+          </div>
+          <div class="cell">
+            <div class="k">3</div>
+            <div class="l">Buyer requirements matching your maize crop</div>
+          </div>
+          <div class="cell">
+            <div class="k">5</div>
+            <div class="l">Labourers confirmed for Saturday's harvest</div>
+          </div>
+          <div class="cell wide">
+            <div class="l" style="margin-bottom:10px;color:var(--cream);font-weight:600;">Active rentals</div>
+            <div class="mini-row"><span>Mahindra 575 DI Tractor</span><span class="tag tag-marigold">Returns in 2
+                days</span></div>
+            <div class="mini-row"><span>Boom Sprayer Drone</span><span class="tag tag-olive">Delivered today</span>
+            </div>
+          </div>
+          <div class="cell wide">
+            <div class="l" style="margin-bottom:10px;color:var(--cream);font-weight:600;">Recommended for your maize
+              plot</div>
+            <div class="mini-row"><span>NPK 19:19:19, 50kg</span><span class="tag tag-olive">In season</span></div>
+            <div class="mini-row"><span>ITC Foods — maize buy request</span><span class="tag tag-chili">Closes in 4
+                days</span></div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
-</div>
 
-<div id="toast"></div>
-<script src="api.js"></script>
-<script src="script.js"></script>
-<script src="integration.js"></script>
+  <div id="toast"></div>
+  <script src="api.js"></script>
+  <script src="script.js"></script>
+  <script src="integration.js"></script>
 </body>
+
 </html>

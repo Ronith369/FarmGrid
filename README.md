@@ -1,6 +1,6 @@
-# FarmGrid / Kheti Sahayak — Integrated Project
+# FarmGrid / ಕೃಷಿ ಮಿತ್ರ — Integrated Project
 
-This package combines the supplied **Kheti Sahayak frontend** with the supplied **FarmGrid FastAPI backend**.
+This package combines the supplied **ಕೃಷಿ ಮಿತ್ರ frontend** with the supplied **FarmGrid FastAPI backend**.
 
 ## What was integrated
 - Existing farmer/provider HTML, CSS and dashboard UI retained.

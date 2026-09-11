@@ -1,89 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crop Selling · Kheti Sahayak</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crop Selling · ಕೃಷಿ ಮಿತ್ರ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<div class="app">
-  <aside class="sidebar">
-  <div class="sb-brand"><div class="brand-mark"></div><div><div class="sb-brand-name">Kheti Sahayak</div><div class="sb-role-tag">Farmer dashboard</div></div></div>
-  <nav class="sb-nav">
-  <a class="sb-link" href="farmer-overview.html"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Overview</a>
-<a class="sb-link" href="farmer-rental.html"><svg class="ic" viewBox="0 0 24 24"><circle cx="7" cy="17" r="2.5"/><circle cx="17" cy="17" r="2.5"/><path d="M9.5 17h5M4 17 5 9h5l3 4h4l2 4M9 9V6h3"/></svg>Rental Equipment</a>
-<a class="sb-link" href="farmer-nutrition.html"><svg class="ic" viewBox="0 0 24 24"><path d="M12 21c-4-2-8-6-8-11a8 8 0 0 1 16 0c0 5-4 9-8 11Z"/><path d="M12 10v7"/></svg>Nutrition &amp; Protection</a>
-<a class="sb-link active" href="farmer-selling.html"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>Crop Selling<span class="badge">12</span></a>
-<a class="sb-link" href="farmer-labour.html"><svg class="ic" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="8" r="2.4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M17 13a4 4 0 0 1 4 4v1"/></svg>Labour Hiring</a>
-
-  </nav>
-  <div class="sb-foot">
-    <div class="sb-user"><div class="sb-avatar">RG</div><div><div class="un">Ravi Gowda</div><div class="ul">Sagar Taluk, 4.2 acres</div></div></div>
-    <div class="sb-switch"><svg class="ic" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>Switch role — <a href="login.html?role=resource_owner&next=provider-overview.html">go to Provider</a></span></div>
-  </div>
-</aside>
-  <div class="main">
-    <div class="topbar">
-      <div style="display:flex;align-items:center;gap:14px;">
-        <button class="hamburger tb-icon-btn" id="hamburger"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-        <div><div class="tb-title">Crop Selling</div><div class="tb-sub">Buyer requirements and your own produce listings</div></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sb-brand">
+        <div class="brand-mark"></div>
+        <div>
+          <div class="sb-brand-name">ಕೃಷಿ ಮಿತ್ರ</div>
+          <div class="sb-role-tag">Farmer dashboard</div>
+        </div>
       </div>
-      <div class="tb-right"><button class="tb-icon-btn" title="Notifications"><svg class="ic" viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 4 1.5 5.5 2 6.5H4C4.5 13.5 6 12 6 8Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg><span class="dot"></span></button></div>
-    </div>
-    <div class="content">
-      
-<div class="section-head">
-  <div><h2>Crop Selling</h2><p>Companies and mandi traders post what they need to buy — or list your own produce for anyone to make an offer on.</p></div>
-  <button class="btn btn-primary" onclick="openModal('m-sell')"><svg class="ic" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M12 5v14M5 12h14"/></svg>List my produce</button>
-</div>
-<div class="row-list"><div class="list-row">
-    <div class="lic"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg></div>
-    <div class="lbody"><h4>Your listing — Maize, 40 quintals</h4><p>Asking ₹2,100/quintal · Ready in 12 days</p></div>
-    <span class="tag tag-chili">2 offers</span>
-  </div><div class="list-row">
-    <div class="lic"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg></div>
-    <div class="lbody"><h4>ITC Foods — Maize procurement</h4><p>500 quintals · ₹2,150/quintal · closes in 4 days</p></div>
-    <span class="tag tag-marigold" style="margin-right:10px;">Company</span><button class="btn btn-olive small" onclick="toast(&quot;Offer sent for ITC Foods — Maize procurement&quot;)">Make offer</button>
-  </div><div class="list-row">
-    <div class="lic"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg></div>
-    <div class="lbody"><h4>Karnataka Milk Federation — Fodder maize</h4><p>200 quintals · ₹1,600/quintal · closes in 9 days</p></div>
-    <span class="tag tag-olive" style="margin-right:10px;">Cooperative</span><button class="btn btn-olive small" onclick="toast(&quot;Offer sent for Karnataka Milk Federation — Fodder maize&quot;)">Make offer</button>
-  </div><div class="list-row">
-    <div class="lic"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg></div>
-    <div class="lbody"><h4>Malnad Areca Traders — Areca nut</h4><p>80 quintals · ₹42,000/quintal · closes in 12 days</p></div>
-    <span class="tag tag-muted" style="margin-right:10px;">Local trader</span><button class="btn btn-olive small" onclick="toast(&quot;Offer sent for Malnad Areca Traders — Areca nut&quot;)">Make offer</button>
-  </div><div class="list-row">
-    <div class="lic"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg></div>
-    <div class="lbody"><h4>Nandini Agro Exports — Paddy (BPT)</h4><p>350 quintals · ₹2,050/quintal · closes in 6 days</p></div>
-    <span class="tag tag-marigold" style="margin-right:10px;">Company</span><button class="btn btn-olive small" onclick="toast(&quot;Offer sent for Nandini Agro Exports — Paddy (BPT)&quot;)">Make offer</button>
-  </div></div>
+      <nav class="sb-nav">
+        <a class="sb-link" href="farmer-overview.html"><svg class="ic" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="7" height="9" />
+            <rect x="14" y="3" width="7" height="5" />
+            <rect x="14" y="12" width="7" height="9" />
+            <rect x="3" y="16" width="7" height="5" />
+          </svg>Overview</a>
+        <a class="sb-link" href="farmer-rental.html"><svg class="ic" viewBox="0 0 24 24">
+            <circle cx="7" cy="17" r="2.5" />
+            <circle cx="17" cy="17" r="2.5" />
+            <path d="M9.5 17h5M4 17 5 9h5l3 4h4l2 4M9 9V6h3" />
+          </svg>Rental Equipment</a>
+        <a class="sb-link" href="farmer-nutrition.html"><svg class="ic" viewBox="0 0 24 24">
+            <path d="M12 21c-4-2-8-6-8-11a8 8 0 0 1 16 0c0 5-4 9-8 11Z" />
+            <path d="M12 10v7" />
+          </svg>Nutrition &amp; Protection</a>
+        <a class="sb-link active" href="farmer-selling.html"><svg class="ic" viewBox="0 0 24 24">
+            <path d="M3 7h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z" />
+            <path d="M8 7V5a4 4 0 0 1 8 0v2" />
+          </svg>Crop Selling<span class="badge">12</span></a>
+        <a class="sb-link" href="farmer-labour.html"><svg class="ic" viewBox="0 0 24 24">
+            <circle cx="9" cy="7" r="3" />
+            <circle cx="17" cy="8" r="2.4" />
+            <path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2" />
+            <path d="M17 13a4 4 0 0 1 4 4v1" />
+          </svg>Labour Hiring</a>
 
+      </nav>
+      <div class="sb-foot">
+        <div class="sb-user">
+          <div class="sb-avatar">RG</div>
+          <div>
+            <div class="un">Ravi Gowda</div>
+            <div class="ul">Sagar Taluk, 4.2 acres</div>
+          </div>
+        </div>
+        <div class="sb-switch"><svg class="ic" viewBox="0 0 24 24" style="width:15px;height:15px">
+            <path d="M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3" />
+          </svg><span>Switch role — <a href="login.html?role=resource_owner&next=provider-overview.html">go to
+              Provider</a></span></div>
+      </div>
+    </aside>
+    <div class="main">
+      <div class="topbar">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <button class="hamburger tb-icon-btn" id="hamburger"><svg class="ic" viewBox="0 0 24 24">
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg></button>
+          <div>
+            <div class="tb-title">Crop Selling</div>
+            <div class="tb-sub">Buyer requirements and your own produce listings</div>
+          </div>
+        </div>
+        <div class="tb-right"><button class="tb-icon-btn" title="Notifications"><svg class="ic" viewBox="0 0 24 24">
+              <path d="M6 8a6 6 0 1 1 12 0c0 4 1.5 5.5 2 6.5H4C4.5 13.5 6 12 6 8Z" />
+              <path d="M10 19a2 2 0 0 0 4 0" />
+            </svg><span class="dot"></span></button></div>
+      </div>
+      <div class="content">
+
+        <div class="section-head">
+          <div>
+            <h2>Crop Selling</h2>
+            <p>Companies and mandi traders post what they need to buy — or list your own produce for anyone to make an
+              offer on.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('m-sell')"><svg class="ic" viewBox="0 0 24 24"
+              style="width:16px;height:16px">
+              <path d="M12 5v14M5 12h14" />
+            </svg>List my produce</button>
+        </div>
+        <div class="row-list">
+          <div class="list-row">
+            <div class="lic"><svg class="ic" viewBox="0 0 24 24">
+                <path d="M3 7h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z" />
+                <path d="M8 7V5a4 4 0 0 1 8 0v2" />
+              </svg></div>
+            <div class="lbody">
+              <h4>Your listing — Maize, 40 quintals</h4>
+              <p>Asking ₹2,100/quintal · Ready in 12 days</p>
+            </div>
+            <span class="tag tag-chili">2 offers</span>
+          </div>
+          <div class="list-row">
+            <div class="lic"><svg class="ic" viewBox="0 0 24 24">
+                <path d="M3 7h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z" />
+                <path d="M8 7V5a4 4 0 0 1 8 0v2" />
+              </svg></div>
+            <div class="lbody">
+              <h4>ITC Foods — Maize procurement</h4>
+              <p>500 quintals · ₹2,150/quintal · closes in 4 days</p>
+            </div>
+            <span class="tag tag-marigold" style="margin-right:10px;">Company</span><button class="btn btn-olive small"
+              onclick="toast(&quot;Offer sent for ITC Foods — Maize procurement&quot;)">Make offer</button>
+          </div>
+          <div class="list-row">
+            <div class="lic"><svg class="ic" viewBox="0 0 24 24">
+                <path d="M3 7h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z" />
+                <path d="M8 7V5a4 4 0 0 1 8 0v2" />
+              </svg></div>
+            <div class="lbody">
+              <h4>Karnataka Milk Federation — Fodder maize</h4>
+              <p>200 quintals · ₹1,600/quintal · closes in 9 days</p>
+            </div>
+            <span class="tag tag-olive" style="margin-right:10px;">Cooperative</span><button class="btn btn-olive small"
+              onclick="toast(&quot;Offer sent for Karnataka Milk Federation — Fodder maize&quot;)">Make offer</button>
+          </div>
+          <div class="list-row">
+            <div class="lic"><svg class="ic" viewBox="0 0 24 24">
+                <path d="M3 7h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z" />
+                <path d="M8 7V5a4 4 0 0 1 8 0v2" />
+              </svg></div>
+            <div class="lbody">
+              <h4>Malnad Areca Traders — Areca nut</h4>
+              <p>80 quintals · ₹42,000/quintal · closes in 12 days</p>
+            </div>
+            <span class="tag tag-muted" style="margin-right:10px;">Local trader</span><button
+              class="btn btn-olive small"
+              onclick="toast(&quot;Offer sent for Malnad Areca Traders — Areca nut&quot;)">Make offer</button>
+          </div>
+          <div class="list-row">
+            <div class="lic"><svg class="ic" viewBox="0 0 24 24">
+                <path d="M3 7h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z" />
+                <path d="M8 7V5a4 4 0 0 1 8 0v2" />
+              </svg></div>
+            <div class="lbody">
+              <h4>Nandini Agro Exports — Paddy (BPT)</h4>
+              <p>350 quintals · ₹2,050/quintal · closes in 6 days</p>
+            </div>
+            <span class="tag tag-marigold" style="margin-right:10px;">Company</span><button class="btn btn-olive small"
+              onclick="toast(&quot;Offer sent for Nandini Agro Exports — Paddy (BPT)&quot;)">Make offer</button>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
-</div>
 
-<div class="modal-bg" id="m-sell">
-  <div class="modal">
-    <h3>List your produce</h3>
-    <div class="msub">Buyers matching your crop and quantity will see this and can make an offer.</div>
-    <div class="field"><label>Crop</label><input type="text" placeholder="e.g. Maize, Areca nut, Paddy"></div>
-    <div class="field"><label>Quantity available</label><input type="text" placeholder="e.g. 40 quintals"></div>
-    <div class="field"><label>Expected price / quintal</label><input type="text" placeholder="e.g. ₹2,150"></div>
-    <div class="field"><label>Ready by</label><input type="date"></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('m-sell')">Cancel</button>
-      <button class="btn btn-primary" id="btn-list-produce">List produce</button>
+  <div class="modal-bg" id="m-sell">
+    <div class="modal">
+      <h3>List your produce</h3>
+      <div class="msub">Buyers matching your crop and quantity will see this and can make an offer.</div>
+      <div class="field"><label>Crop</label><input type="text" placeholder="e.g. Maize, Areca nut, Paddy"></div>
+      <div class="field"><label>Quantity available</label><input type="text" placeholder="e.g. 40 quintals"></div>
+      <div class="field"><label>Expected price / quintal</label><input type="text" placeholder="e.g. ₹2,150"></div>
+      <div class="field"><label>Ready by</label><input type="date"></div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal('m-sell')">Cancel</button>
+        <button class="btn btn-primary" id="btn-list-produce">List produce</button>
+      </div>
     </div>
   </div>
-</div>
 
 
-<div id="toast"></div>
-<script src="api.js"></script>
-<script src="script.js"></script>
-<script src="integration.js"></script>
+  <div id="toast"></div>
+  <script src="api.js"></script>
+  <script src="script.js"></script>
+  <script src="integration.js"></script>
 </body>
+
 </html>

@@ -31,7 +31,7 @@ def startup():
 def health():
     return {"status": "healthy", "service": "FarmGrid API"}
 
-# Serve the supplied Kheti Sahayak HTML/CSS/JS frontend from the same FastAPI
+# Serve the supplied ಕೃಷಿ ಮಿತ್ರ HTML/CSS/JS frontend from the same FastAPI
 # process. This removes CORS/file:// problems and gives the project one URL.
 FRONTEND_DIR = Path(__file__).resolve().parents[3] / "frontend"
 if FRONTEND_DIR.exists():
