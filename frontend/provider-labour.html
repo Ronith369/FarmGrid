@@ -34,21 +34,30 @@
     </div>
     <div class="content">
       
-<div class="section-head"><div><h2>Labour Hiring</h2><p>Farmers post what work they need — accept the ones your crew can cover.</p></div></div>
-<div class="row-list"><div class="list-row">
-    <div class="lic"><svg class="ic" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="8" r="2.4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M17 13a4 4 0 0 1 4 4v1"/></svg></div>
-    <div class="lbody"><h4>Paddy transplanting — 6 workers</h4><p>Ravi Gowda · Sagar Taluk · needed Saturday</p></div>
-    <div class="lactions"><button class="btn btn-ghost small" onclick="declineRow(this)">Decline</button><button class="btn btn-primary small" onclick="acceptRow(this)">Accept</button></div>
-  </div><div class="list-row">
-    <div class="lic"><svg class="ic" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="8" r="2.4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M17 13a4 4 0 0 1 4 4v1"/></svg></div>
-    <div class="lbody"><h4>Maize weeding — 3 workers</h4><p>Lakshmi Naik · Shikaripura · needed in 3 days</p></div>
-    <div class="lactions"><button class="btn btn-ghost small" onclick="declineRow(this)">Decline</button><button class="btn btn-primary small" onclick="acceptRow(this)">Accept</button></div>
-  </div><div class="list-row">
-    <div class="lic"><svg class="ic" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="8" r="2.4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M17 13a4 4 0 0 1 4 4v1"/></svg></div>
-    <div class="lbody"><h4>Areca nut harvesting — 4 workers</h4><p>Manjunath H · Hosanagara · needed in 2 days</p></div>
-    <span class="tag tag-olive">Accepted</span>
-  </div></div>
+<div class="section-head">
+  <div><h2>Labour Hiring</h2><p>Farmers post what work they need — accept requests or list your registered labour crews.</p></div>
+  <button class="btn btn-primary" onclick="openModal('m-crew')"><svg class="ic" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M12 5v14M5 12h14"/></svg>Register Labour Crew</button>
+</div>
+<div class="row-list"></div>
 
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="m-crew">
+  <div class="modal">
+    <h3>Register Labour Crew</h3>
+    <div class="msub">List your crew details so farmers in your region can hire your team.</div>
+    <div class="field"><label>Crew / Contractor Name</label><input type="text" placeholder="e.g. Sagar Harvesting Crew"></div>
+    <div class="field"><label>Provider Type</label>
+      <select><option value="contractor">Contractor</option><option value="group">Self-Help Group</option><option value="individual">Individual Crew Lead</option></select>
+    </div>
+    <div class="field"><label>Workers Available</label><input type="number" placeholder="e.g. 10" min="1"></div>
+    <div class="field"><label>Daily Wage / Worker (₹)</label><input type="number" placeholder="e.g. 500" min="100"></div>
+    <div class="field"><label>Region / Taluk</label><input type="text" placeholder="e.g. Shivamogga"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('m-crew')">Cancel</button>
+      <button class="btn btn-primary" id="btn-save-crew">Save Labour Crew</button>
     </div>
   </div>
 </div>
@@ -59,3 +68,4 @@
 <script src="integration.js"></script>
 </body>
 </html>
+

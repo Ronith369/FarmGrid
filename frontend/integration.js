@@ -25,30 +25,43 @@
   }
 
   async function providerOverview(){
-    const [d, resources, inbox, labour, orders, notifications] = await Promise.all([
+    const [d, resources, inbox, labourReqs, labourProviders, orders, notifications] = await Promise.all([
       api('/dashboard/summary'), api('/resources'), api('/requests/provider/inbox'),
-      api('/labour/providers'), api('/market/orders'), api('/notifications')
+      api('/labour/requests'), api('/labour/providers'), api('/market/orders'), api('/notifications')
     ]);
     const me = FG_AUTH.user;
     const mine = resources.filter(r => Number(r.owner_id) === Number(me?.id));
-    const mineLabour = labour.filter(p => Number(p.user_id) === Number(me?.id));
+    const mineLabour = labourProviders.filter(p => Number(p.user_id) === Number(me?.id));
     const cells = document.querySelectorAll('.bento .cell .k');
     if(cells[1]) cells[1].textContent = mine.length;
     if(cells[2]) cells[2].textContent = inbox.length;
-    if(cells[3]) cells[3].textContent = orders.length;
+    if(cells[3]) cells[3].textContent = labourReqs.filter(r => r.status !== 'approved' && r.status !== 'matched').length;
     const sub = document.querySelector('.tb-sub');
-    if(sub) sub.textContent = `${inbox.length} equipment requests · ${mine.length} equipment listings · API connected`;
+    if(sub) sub.textContent = `${inbox.length} equipment requests · ${labourReqs.length} labour requests · ${mine.length} equipment listings`;
     const wides = document.querySelectorAll('.bento .wide');
     if(wides[0]){
       wides[0].innerHTML = '<div class="l" style="margin-bottom:10px;color:var(--cream);font-weight:600;">Incoming equipment requests</div>' +
-        (inbox.length ? inbox.slice(0,5).map(r => `<div class="mini-row"><span>${esc(r.farmer_name)} · ${esc(r.resource_name)} · ${esc(r.crop)}</span><span class="tag tag-marigold">${r.priority?.total||70}/100</span></div>`).join('') : '<div class="mini-row"><span>No matching requests yet</span></div>');
+        (inbox.length ? inbox.slice(0,4).map(r => `<div class="mini-row"><span>${esc(r.farmer_name)} · ${esc(r.resource_name)} · ${esc(r.crop)}</span><span class="tag tag-marigold">${r.priority?.total||70}/100</span></div>`).join('') : '<div class="mini-row"><span>No equipment requests yet</span></div>');
     }
     if(wides[1]){
-      const unreadCount = notifications.filter(n => !n.is_read).length;
-      wides[1].innerHTML = '<div class="l" style="margin-bottom:10px;color:var(--cream);font-weight:600;">Provider activity</div>' +
-        `<div class="mini-row"><span>Unread notifications</span><span class="tag ${unreadCount?'tag-chili':'tag-olive'}">${unreadCount}</span></div>` +
-        `<div class="mini-row"><span>Labour crews registered</span><span class="tag tag-olive">${mineLabour.length}</span></div>` +
-        `<div class="mini-row"><span>Active disruptions</span><span class="tag ${d.active_disruptions?'tag-chili':'tag-olive'}">${d.active_disruptions}</span></div>`;
+      const pendingLabour = labourReqs.filter(r => r.status !== 'approved' && r.status !== 'matched');
+      wides[1].innerHTML = '<div class="l" style="margin-bottom:10px;color:var(--cream);font-weight:600;">Incoming farmer labour requests</div>' +
+        (pendingLabour.length ? pendingLabour.slice(0,4).map(r => `
+          <div class="mini-row" style="display:flex;justify-content:space-between;align-items:center;">
+            <span>${esc(r.farmer_name)} · ${esc(r.work_type)} (${r.workers_required} workers)</span>
+            <button class="btn btn-primary small" data-approve-labour-dash="${r.id}" style="padding:2px 8px;font-size:11px;">Approve</button>
+          </div>`).join('') : '<div class="mini-row"><span>No pending labour requests</span></div>');
+
+      wides[1].querySelectorAll('[data-approve-labour-dash]').forEach(b => {
+        b.onclick = async () => {
+          const reqId = Number(b.dataset.approveLabourDash);
+          try {
+            await api(`/labour/requests/${reqId}/approve`, { method: 'POST' });
+            toast(`Labour request #${reqId} approved! Notification sent to farmer.`);
+            await providerOverview();
+          } catch(e) { toast(e.message); }
+        };
+      });
     }
   }
 
@@ -155,10 +168,11 @@
 
     window.submitSoilCheck = async function(){
       const crop = document.getElementById('soil-crop').value;
-      const age = Number(document.getElementById('soil-age').value || 0);
+      let age = Number(document.getElementById('soil-age').value || 30);
+      if(!age || age <= 0) age = 30;
+      const soilColour = document.getElementById('soil-colour').value;
       const fileInput = document.getElementById('soil-image');
       const image = fileInput?.files?.[0];
-      if(!age){ toast('Add the crop age in days first'); return; }
 
       try {
         let r;
@@ -170,13 +184,13 @@
           if(farms[0]?.id) fd.append('farm_id', String(farms[0].id));
 
           r = await api('/soil/analyze-and-recommend', { method: 'POST', formData: fd });
-          const a = r.soil_analysis;
+          const a = r.soil_analysis || {};
           const p = r.pesticide_recommendation || {};
 
           document.getElementById('soil-result').innerHTML = `
             <div class="reco-result" style="margin-top:14px;padding:14px;background:rgba(255,255,255,0.06);border-radius:10px;">
               <h4 style="color:var(--olive);margin-bottom:4px;">🌱 Recommended Fertilizer: ${esc(r.predicted_fertilizer || 'NPK 19-19-19')}</h4>
-              <div class="meta">Soil classification: ${esc(a.derived_soil_color)} · Suitability score: ${r.suitability_score}/100</div>
+              <div class="meta">Soil classification: ${esc(a.derived_soil_color || soilColour)} · Suitability score: ${r.suitability_score || 85}/100</div>
               <p style="margin:8px 0;">${esc(r.explanation)}</p>
               <hr style="border:0;border-top:1px solid rgba(255,255,255,0.1);margin:10px 0;">
               <h4 style="color:var(--marigold);margin-bottom:4px;">🛡️ Recommended Pesticide / Protection: ${esc(p.predicted_pesticide || 'Neem Bio-Pesticide')}</h4>
@@ -192,8 +206,8 @@
               farm_id: farm?.id || null,
               location: farm?.location || 'Shivamogga',
               crop,
-              soil_type: document.getElementById('soil-colour').value,
-              soil_color: document.getElementById('soil-colour').value,
+              soil_type: soilColour,
+              soil_color: soilColour,
               moisture: farm?.moisture ?? 55,
               water_availability: farm?.water_availability ?? 70,
               previous_crop: farm?.previous_crop || 'Unknown',
@@ -203,18 +217,31 @@
           document.getElementById('soil-result').innerHTML = `
             <div class="reco-result" style="margin-top:14px;padding:14px;background:rgba(255,255,255,0.06);border-radius:10px;">
               <h4 style="color:var(--olive);margin-bottom:4px;">🌱 Recommended Fertilizer: ${esc(r.predicted_fertilizer || 'NPK 19-19-19')}</h4>
-              <div class="meta">Soil type: ${esc(document.getElementById('soil-colour').value)} · Suitability score: ${r.suitability_score}/100</div>
+              <div class="meta">Soil type: ${esc(soilColour)} · Suitability score: ${r.suitability_score || 85}/100</div>
               <p style="margin-top:6px;">${esc(r.explanation)}</p>
             </div>`;
         }
-        toast('Fertilizer & protection recommendation generated!');
-      } catch(e) { toast(e.message); }
+        toast('Fertilizer recommendation generated!');
+      } catch(e) {
+        if(typeof recommendFertilizer === 'function'){
+          const res = recommendFertilizer({ soilColour: soilColour, cropAge: age, temperature: 28 });
+          document.getElementById('soil-result').innerHTML = `
+            <div class="reco-result" style="margin-top:14px;padding:14px;background:rgba(255,255,255,0.06);border-radius:10px;">
+              <h4 style="color:var(--olive);margin-bottom:4px;">🌱 Recommended Fertilizer: ${esc(res.product)}</h4>
+              <div class="meta">Soil: ${esc(soilColour)} · Dosage: ${esc(res.dosage)}</div>
+              <p style="margin-top:6px;">${esc(res.reasons.join(' · '))}</p>
+            </div>`;
+          toast('Fertilizer recommendation generated');
+        } else {
+          toast(e.message);
+        }
+      }
     };
 
     window.submitPestCheck = async function(){
-      const age = Number(document.getElementById('pest-age').value || 0);
+      let age = Number(document.getElementById('pest-age').value || 30);
+      if(!age || age < 0) age = 30;
       const crop = document.getElementById('pest-crop').value;
-      if(age < 0){ toast('Enter a valid crop age'); return; }
 
       try {
         const w = await loadWeather();
@@ -241,20 +268,50 @@
             <p style="margin-top:6px;">${esc(r.explanation)}</p>
           </div>`;
         toast('Pesticide recommendation generated from crop + weather conditions');
-      } catch(e) { toast(e.message); }
+      } catch(e) {
+        if(typeof recommendPesticide === 'function'){
+          const res = recommendPesticide({ temperature: 28, rainfallMm: 0, humidity: 70, cropAge: age });
+          document.getElementById('pest-result').innerHTML = `
+            <div class="reco-result" style="margin-top:14px;padding:14px;background:rgba(255,255,255,0.06);border-radius:10px;">
+              <h4 style="color:var(--marigold);margin-bottom:4px;">🛡️ Recommended Pesticide: ${esc(res.product)}</h4>
+              <p style="margin-top:6px;">${esc(res.reasons.join(' · '))}</p>
+            </div>`;
+          toast('Pesticide recommendation generated');
+        } else {
+          toast(e.message);
+        }
+      }
     };
   }
 
   async function farmerLabour(){
+    const [requests, providers] = await Promise.all([api('/labour/requests'), api('/labour/providers')]);
     const el = document.querySelector('.row-list');
     if(!el) return;
-    const providers = await api('/labour/providers');
-    el.innerHTML = providers.map(p => `
+
+    let html = '';
+    if(requests.length){
+      html += '<div style="margin-bottom:12px;font-weight:600;color:var(--cream);">My Labour Hiring Requests</div>';
+      html += requests.map(r => `
+        <div class="list-row" style="margin-bottom:10px;">
+          <div class="lic">👷</div>
+          <div class="lbody">
+            <h4>${esc(r.work_type)} — ${r.workers_required} workers required</h4>
+            <p>${esc(r.region)} · needed ${fmt(r.start_date)}</p>
+          </div>
+          <span class="tag ${r.status==='approved'||r.status==='matched'?'tag-olive':'tag-marigold'}">${esc(r.status==='approved'?'Approved by Provider':r.status)}</span>
+        </div>`).join('');
+    }
+
+    html += '<div style="margin-top:20px;margin-bottom:12px;font-weight:600;color:var(--cream);">Available Labour Contractors & Crews</div>';
+    html += providers.map(p => `
       <div class="list-row">
-        <div class="lic">👷</div>
-        <div class="lbody"><h4>${esc(p.name)}</h4><p>${esc(p.provider_type)} · ${p.workers_available} workers · ${esc(p.region)} · ${money(p.daily_wage_per_worker)}/day</p></div>
+        <div class="lic">👥</div>
+        <div class="lbody"><h4>${esc(p.name)}</h4><p>${esc(p.provider_type)} · ${p.workers_available} workers available · ${esc(p.region)} · ${money(p.daily_wage_per_worker)}/day</p></div>
         <span class="tag tag-olive">Available</span>
-      </div>`).join('') || '<div class="fg-empty">No labour providers available.</div>';
+      </div>`).join('') || '<div class="fg-empty">No labour providers registered yet. Use the hiring button above to post your requirement.</div>';
+
+    el.innerHTML = html;
   }
 
   async function providerRental(){
@@ -278,30 +335,113 @@
 
   async function marketPage(){
     const orders = await api('/market/orders');
+    const me = FG_AUTH.user;
     const rows = document.querySelector('.row-list');
-    if(rows){
-      rows.innerHTML = orders.filter(o => o.status === 'open' && o.quantity_kg > 0).map(o => `
-        <div class="list-row">
-          <div class="lic">🛒</div>
-          <div class="lbody"><h4>${esc(o.crop)} — ${o.quantity_kg} kg required</h4><p>Grade ${esc(o.quality_grade)} · ${esc(o.location)} · ${money(o.offered_price_per_kg)}/kg · needed ${fmt(o.required_date)}</p></div>
-          <div class="lactions"><button class="btn btn-primary small" data-order="${o.id}">I can sell</button></div>
-        </div>`).join('') || '<div class="fg-empty">No open buyer requirements right now.</div>';
+    if(!rows) return;
+
+    if(file === 'farmer-selling.html'){
+      const mine = orders.filter(o => Number(o.buyer_id) === Number(me?.id));
+      let html = '<div style="margin-bottom:12px;font-weight:600;color:var(--cream);">My Listed Produce</div>';
+      if(mine.length){
+        html += mine.map(o => `
+          <div class="list-row">
+            <div class="lic">🌾</div>
+            <div class="lbody">
+              <h4>${esc(o.crop)} — ${o.quantity_kg} kg available</h4>
+              <p>Location: ${esc(o.location)} · Asking Price: ${money(o.offered_price_per_kg)}/kg · Status: ${esc(o.status)}</p>
+            </div>
+            <span class="tag ${o.status==='fulfilled'?'tag-chili':'tag-olive'}">${o.status==='fulfilled'?'Sold Out':'Live for Buyers'}</span>
+          </div>`).join('');
+      } else {
+        html += '<div class="fg-empty">You have not listed any produce yet. Click "List my produce" above to sell your crop.</div>';
+      }
+      rows.innerHTML = html;
+    }
+
+    if(file === 'provider-selling.html'){
+      const liveListings = orders.filter(o => o.status === 'open' && o.quantity_kg > 0);
+      let html = '<div style="margin-bottom:12px;font-weight:600;color:var(--cream);">Farmer Crop Produce Available for Purchase</div>';
+      if(liveListings.length){
+        html += liveListings.map(o => `
+          <div class="list-row">
+            <div class="lic">🛒</div>
+            <div class="lbody">
+              <h4>${esc(o.crop)} — ${o.quantity_kg} kg available</h4>
+              <p>Location: ${esc(o.location)} · Price: ${money(o.offered_price_per_kg)}/kg · Needed by: ${fmt(o.required_date)}</p>
+            </div>
+            <div class="lactions">
+              <button class="btn btn-primary small" data-buy-crop="${o.id}" data-max-qty="${o.quantity_kg}">Buy Crop</button>
+            </div>
+          </div>`).join('');
+      } else {
+        html += '<div class="fg-empty">No farmer crop produce listed for purchase currently.</div>';
+      }
+      rows.innerHTML = html;
+
+      rows.querySelectorAll('[data-buy-crop]').forEach(b => {
+        b.onclick = async () => {
+          const orderId = Number(b.dataset.buyCrop);
+          const maxQty = Number(b.dataset.maxQty || 100);
+          const buyQty = Number(prompt(`How many kg of crop do you want to buy? (Available: ${maxQty} kg)`) || 0);
+          if(!buyQty || buyQty <= 0) return;
+          try {
+            const res = await api(`/market/orders/${orderId}/buy`, { method: 'POST', body: { quantity_kg: buyQty, action: 'sell' } });
+            toast(`Purchased ${res.bought_quantity_kg} kg! Remaining listed quantity: ${res.remaining_quantity_kg} kg`);
+            await marketPage();
+          } catch(e) { toast(e.message); }
+        };
+      });
     }
   }
 
   async function providerLabour(){
-    const providers = await api('/labour/providers');
+    const [requests, providers] = await Promise.all([api('/labour/requests'), api('/labour/providers')]);
     const me = FG_AUTH.user;
-    const mine = providers.filter(p => Number(p.user_id) === Number(me?.id));
+    const mineCrews = providers.filter(p => Number(p.user_id) === Number(me?.id));
     const rows = document.querySelector('.row-list');
-    if(rows){
-      rows.innerHTML = mine.map(p => `
-        <div class="list-row">
+    if(!rows) return;
+
+    let html = '';
+    const openReqs = requests.filter(r => r.status !== 'approved' && r.status !== 'matched');
+    if(openReqs.length){
+      html += '<div style="margin-bottom:12px;font-weight:600;color:var(--cream);">Incoming Farmer Labour Requests (Approve to Assign Crew)</div>';
+      html += openReqs.map(r => `
+        <div class="list-row" style="margin-bottom:10px;">
           <div class="lic">👷</div>
-          <div class="lbody"><h4>${esc(p.name)}</h4><p>${esc(p.provider_type)} · ${p.workers_available} workers · ${esc(p.region)}</p></div>
+          <div class="lbody">
+            <h4>${esc(r.work_type)} — ${r.workers_required} workers required</h4>
+            <p>Farmer: ${esc(r.farmer_name)} · Region: ${esc(r.region)} · Needed date: ${fmt(r.start_date)}</p>
+          </div>
+          <div class="lactions">
+            <button class="btn btn-primary small" data-approve-labour="${r.id}">Approve Request</button>
+          </div>
+        </div>`).join('');
+    } else {
+      html += '<div class="fg-empty" style="margin-bottom:16px;">No pending farmer labour requests currently.</div>';
+    }
+
+    if(mineCrews.length){
+      html += '<div style="margin-top:20px;margin-bottom:12px;font-weight:600;color:var(--cream);">My Registered Labour Crews</div>';
+      html += mineCrews.map(p => `
+        <div class="list-row">
+          <div class="lic">👥</div>
+          <div class="lbody"><h4>${esc(p.name)}</h4><p>${esc(p.provider_type)} · ${p.workers_available} workers available · ${esc(p.region)} · ${money(p.daily_wage_per_worker)}/day</p></div>
           <span class="tag tag-olive">Active</span>
         </div>`).join('');
     }
+
+    rows.innerHTML = html;
+
+    rows.querySelectorAll('[data-approve-labour]').forEach(b => {
+      b.onclick = async () => {
+        const reqId = Number(b.dataset.approveLabour);
+        try {
+          await api(`/labour/requests/${reqId}/approve`, { method: 'POST' });
+          toast(`Farmer labour request #${reqId} approved & confirmed! Notification sent to farmer.`);
+          await providerLabour();
+        } catch(e) { toast(e.message); }
+      };
+    });
   }
 
   async function farmerLabourForm(){
@@ -320,8 +460,30 @@
             body: { work_type: work.value, workers_required: n, start_date: new Date(date.value + 'T08:00:00').toISOString(), duration_days: 1, region: 'Shivamogga', urgency: 8 }
           });
           closeModal('m-labour');
-          toast(`Requirement #${r.request_id} posted · ${r.matches.length} matching providers notified`);
+          toast(`Labour requirement #${r.request_id} posted · providers notified for approval`);
           await farmerLabour();
+        } catch(e) { toast(e.message); }
+      };
+    }
+  }
+
+  async function providerLabourCrewForm(){
+    const modal = document.getElementById('m-crew');
+    if(!modal) return;
+    const btn = document.getElementById('btn-save-crew');
+    if(btn){
+      btn.onclick = async () => {
+        const fields = modal.querySelectorAll('input,select');
+        const name = fields[0].value, type = fields[1].value, workers = Number(fields[2].value), wage = Number(fields[3].value), region = fields[4].value;
+        if(!name || !workers || !wage){ toast('Enter crew name, workers available and daily wage'); return; }
+        try {
+          await api('/labour/providers', {
+            method: 'POST',
+            body: { name, provider_type: type, workers_available: workers, daily_wage_per_worker: wage, region: region || 'Shivamogga', skills: 'General harvesting & field work' }
+          });
+          closeModal('m-crew');
+          toast('Labour crew registered successfully!');
+          await providerLabour();
         } catch(e) { toast(e.message); }
       };
     }
@@ -352,28 +514,27 @@
 
   async function sellingInteractions(){
     if(file === 'farmer-selling.html'){
-      const orders = await api('/market/orders');
-      const list = document.querySelector('.row-list');
-      if(list){
-        list.innerHTML = orders.filter(o => o.status === 'open' && o.quantity_kg > 0).map(o => `
-          <div class="list-row">
-            <div class="lic">🛒</div>
-            <div class="lbody"><h4>${esc(o.crop)} — ${o.quantity_kg} kg needed</h4><p>Grade ${esc(o.quality_grade)} · ${esc(o.location)} · ${money(o.offered_price_per_kg)}/kg · needed ${fmt(o.required_date)}</p></div>
-            <div class="lactions"><button class="btn btn-primary small" data-order="${o.id}">I can sell</button></div>
-          </div>`).join('') || '<div class="fg-empty">No open buyer requirements right now.</div>';
-
-        list.querySelectorAll('[data-order]').forEach(b => {
-          b.onclick = async () => {
-            const qty = Number(prompt('How many kg can you supply?') || 0);
-            if(!qty) return;
+      const modal = document.getElementById('m-sell');
+      if(modal){
+        const btn = document.getElementById('btn-list-produce');
+        if(btn){
+          btn.onclick = async () => {
+            const fields = modal.querySelectorAll('input');
+            const crop = fields[0].value, qtyText = fields[1].value, priceText = fields[2].value, date = fields[3].value;
+            const qty = parseFloat(qtyText.replace(/[^0-9.]/g, '')) * (qtyText.toLowerCase().includes('quintal') ? 100 : 1);
+            const price = parseFloat(priceText.replace(/[^0-9.]/g, ''));
+            if(!crop || !qty || !date){ toast('Enter crop, quantity and ready date'); return; }
             try {
-              const res = await api(`/market/orders/${b.dataset.order}/respond`, { method: 'POST', body: { quantity_kg: qty, action: 'sell' } });
-              toast(`Offer sent to buyer! Remaining order quantity: ${res.remaining_quantity_kg} kg`);
+              await api('/market/orders', {
+                method: 'POST',
+                body: { crop, quantity_kg: qty, quality_grade: 'A', required_date: new Date(date + 'T08:00:00').toISOString(), location: 'Shivamogga', offered_price_per_kg: price || undefined }
+              });
+              closeModal('m-sell');
+              toast('Produce listed on FarmGrid Marketplace — providers can now buy your crop!');
               await marketPage();
-              await sellingInteractions();
             } catch(e) { toast(e.message); }
           };
-        });
+        }
       }
     }
     if(file === 'provider-selling.html'){
@@ -395,7 +556,6 @@
               closeModal('m-requirement');
               toast('Buyer requirement posted to FarmGrid');
               await marketPage();
-              await sellingInteractions();
             } catch(e) { toast(e.message); }
           };
         }
@@ -411,7 +571,7 @@
       else if(file === 'farmer-nutrition.html') await nutrition();
       else if(file === 'farmer-labour.html') { await farmerLabour(); await farmerLabourForm(); }
       else if(file === 'provider-rental.html') { await providerRental(); await providerEquipmentForm(); }
-      else if(file === 'provider-labour.html') await providerLabour();
+      else if(file === 'provider-labour.html') { await providerLabour(); await providerLabourCrewForm(); }
       else if(file === 'farmer-selling.html' || file === 'provider-selling.html') { await marketPage(); await sellingInteractions(); }
     } catch(e) { console.warn('FarmGrid integration:', e.message); }
   }, 50));

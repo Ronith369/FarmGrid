@@ -26,6 +26,32 @@ def providers(region: str | None = None, db=Depends(get_db), user=Depends(curren
     return q.all()
 
 
+@router.get("/requests")
+def list_labour_requests(region: str | None = None, db=Depends(get_db), user=Depends(current_user)):
+    q = db.query(LabourRequest)
+    if user.role == "farmer":
+        q = q.filter(LabourRequest.farmer_id == user.id)
+    if region:
+        q = q.filter(LabourRequest.region.ilike(f"%{region}%"))
+    requests = q.order_by(LabourRequest.created_at.desc()).all()
+    res = []
+    for r in requests:
+        res.append({
+            "id": r.id,
+            "farmer_id": r.farmer_id,
+            "farmer_name": r.farmer.name if r.farmer else "Farmer",
+            "work_type": r.work_type,
+            "workers_required": r.workers_required,
+            "start_date": r.start_date,
+            "duration_days": r.duration_days,
+            "region": r.region,
+            "urgency": r.urgency,
+            "status": r.status,
+            "created_at": r.created_at,
+        })
+    return res
+
+
 @router.post("/requests")
 def labour_request(data: LabourRequestCreate, db=Depends(get_db), user=Depends(current_user)):
     request = LabourRequest(farmer_id=user.id, **data.model_dump())
@@ -35,14 +61,24 @@ def labour_request(data: LabourRequestCreate, db=Depends(get_db), user=Depends(c
 
     matches = []
     matched_providers = match_providers(db, request)
-    for p in matched_providers:
+    recipients = [p.user_id for p in matched_providers if p.user_id and p.user_id != user.id]
+    if not recipients:
+        from app.models.models import User
+        recipients = [
+            row[0] for row in db.query(User.id)
+            .filter(User.role.in_(["resource_owner", "provider", "admin"]), User.id != user.id)
+            .all()
+        ]
+
+    for uid in recipients:
         create_notification(
-            db, p.user_id,
-            "New labour request",
-            f"{user.name} needs {request.work_type} for {request.workers_required} workers in {request.region}. "
-            f"Start: {request.start_date:%d %b}. Duration: {request.duration_days} day(s).",
+            db, uid,
+            "New labour requirement posted",
+            f"{user.name} needs {request.work_type} ({request.workers_required} workers) in {request.region}. Start: {request.start_date:%d %b}.",
             "labour_request",
         )
+
+    for p in matched_providers:
         matches.append({
             "provider_id": p.id,
             "name": p.name,
@@ -70,6 +106,13 @@ def offer(data: LabourOfferCreate, db=Depends(get_db), user=Depends(current_user
     db.commit()
     db.refresh(item)
 
+    create_notification(
+        db, request.farmer_id,
+        "Labour offer received!",
+        f"{user.name} offered {item.offered_workers} workers for your {request.work_type} request at ₹{item.wage_per_worker_day}/day.",
+        "labour_offer",
+    )
+
     return {
         "offer_id": item.id,
         "status": item.status,
@@ -90,5 +133,34 @@ def accept(offer_id: int, db=Depends(get_db), user=Depends(current_user)):
     request = db.query(LabourRequest).filter(LabourRequest.id == item.labour_request_id).first()
     if request:
         request.status = "matched"
+        create_notification(
+            db, request.farmer_id,
+            "Labour crew confirmed!",
+            f"Labour requirement #{request.id} for {request.work_type} has been matched & confirmed.",
+            "labour_matched",
+        )
     db.commit()
     return {"offer_id": item.id, "status": item.status}
+
+
+@router.post("/requests/{request_id}/approve")
+def approve_labour_request(
+    request_id: int,
+    db=Depends(get_db),
+    user=Depends(current_user),
+):
+    request = db.query(LabourRequest).filter(LabourRequest.id == request_id).first()
+    if not request:
+        raise HTTPException(404, "Labour request not found")
+
+    request.status = "approved"
+    create_notification(
+        db, request.farmer_id,
+        "Labour request approved!",
+        f"Contractor/Provider {user.name} approved your labour request for {request.work_type} ({request.workers_required} workers).",
+        "labour_approved",
+    )
+    db.commit()
+    return {"request_id": request.id, "status": request.status}
+
+

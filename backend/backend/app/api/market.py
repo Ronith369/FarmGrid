@@ -96,14 +96,48 @@ def accept_offer(offer_id: int, db=Depends(get_db), user=Depends(current_user)):
     if order.quantity_kg <= 0:
         order.status = "fulfilled"
 
-    # Notify seller that offer was accepted
+@router.post("/orders/{order_id}/buy")
+def buy_crop(
+    order_id: int,
+    data: YieldResponseCreate,
+    db=Depends(get_db),
+    user=Depends(current_user),
+):
+    order = db.query(MarketOrder).filter(MarketOrder.id == order_id).first()
+    if not order:
+        raise HTTPException(404, "Crop listing not found")
+
+    buy_qty = min(order.quantity_kg, data.quantity_kg)
+    if buy_qty <= 0:
+        raise HTTPException(400, "Quantity must be greater than 0")
+
+    order.quantity_kg = max(0.0, order.quantity_kg - buy_qty)
+    if order.quantity_kg <= 0:
+        order.status = "fulfilled"
+
+    item = YieldOffer(
+        market_order_id=order.id,
+        farmer_id=user.id,
+        quantity_kg=buy_qty,
+        action="buy",
+        status="completed",
+    )
+    db.add(item)
+
+    # Notify farmer (creator of listing) that provider bought crop produce
     create_notification(
-        db, offer_item.farmer_id,
-        "Crop offer accepted!",
-        f"Your offer of {offer_item.quantity_kg} kg for {order.crop} has been accepted by buyer.",
-        "offer_accepted",
+        db, order.buyer_id,
+        "Crop produce purchased!",
+        f"Provider/Buyer {user.name} purchased {buy_qty} kg of your {order.crop}. Remaining listed quantity: {order.quantity_kg} kg.",
+        "crop_purchased",
     )
 
     db.commit()
-    return {"offer_id": offer_item.id, "status": offer_item.status, "remaining_quantity_kg": order.quantity_kg}
+    return {
+        "order_id": order.id,
+        "bought_quantity_kg": buy_qty,
+        "remaining_quantity_kg": order.quantity_kg,
+        "status": order.status,
+    }
+
 

@@ -15,7 +15,7 @@ router = APIRouter(prefix="/scheduling", tags=["Scheduling"])
 def allocate(
     request_id: int,
     db=Depends(get_db),
-    user=Depends(role_required("farmer", "admin")),
+    user=Depends(role_required("farmer", "resource_owner", "provider", "admin")),
 ):
     request = db.query(ResourceRequest).filter(ResourceRequest.id == request_id).first()
     if not request:
@@ -61,8 +61,9 @@ def confirm(
     start_time: str,
     end_time: str,
     db=Depends(get_db),
-    user=Depends(role_required("farmer", "admin")),
+    user=Depends(role_required("farmer", "resource_owner", "provider", "admin")),
 ):
+
     request = db.query(ResourceRequest).filter(ResourceRequest.id == request_id).first()
     resource = db.query(Resource).filter(Resource.id == resource_id).first()
 
