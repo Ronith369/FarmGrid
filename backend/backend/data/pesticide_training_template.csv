@@ -1,0 +1,4 @@
+location,crop,crop_age_days,pest,temperature,humidity,rainfall,sunlight,observed_severity,pesticide
+ExampleVillage,Tomato,45,Aphid,30,75,2,7,65,ValidatedPesticideA
+ExampleVillage,Cotton,60,Bollworm,32,68,1,8,70,ValidatedPesticideB
+ExampleVillage,Rice,50,StemBorer,28,82,8,6,55,ValidatedPesticideC

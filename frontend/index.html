@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kheti Sahayak — Field ops for every farm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<section id="landing">
+  <div class="land-top">
+    <div class="brand"><div class="brand-mark"></div><div class="brand-name">Kheti Sahayak<span>field ops, sorted</span></div></div>
+    <div style="color:var(--muted);font-size:0.85rem;">Shivamogga · Karnataka</div>
+  </div>
+  <div class="land-hero">
+    <div class="land-copy">
+      <h1>Rent the tractor.<br>Sell the harvest.<br>Hire the hands. <em>All here.</em></h1>
+      <p>One board for equipment rental, crop nutrition, produce buyers and farm labour — built for the two people who actually run the season: the farmer, and the one who supplies them.</p>
+    </div>
+    <div class="role-picks">
+      <a class="role-card farmer" href="login.html?role=farmer&next=farmer-overview.html">
+        <div class="ric"><svg class="ic" viewBox="0 0 24 24"><path d="M12 2 3 14h6v8h6v-8h6z"/></svg></div>
+        <div class="rtext"><h3>I'm a Farmer</h3><p>Rent equipment, buy inputs, sell your produce, hire labour</p></div>
+        <svg class="ic rgo" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="role-card provider" href="login.html?role=resource_owner&next=provider-overview.html">
+        <div class="ric"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="1"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>
+        <div class="rtext"><h3>I'm a Provider</h3><p>List equipment, supply labour, post produce requirements</p></div>
+        <svg class="ic rgo" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="land-strip">
+    <div class="strip-item"><div class="num">6,400+</div><div class="lbl">Machines listed for rent</div></div>
+    <div class="strip-item"><div class="num">312</div><div class="lbl">Buyer requirements posted this week</div></div>
+    <div class="strip-item"><div class="num">18</div><div class="lbl">Districts with active labour crews</div></div>
+    <div class="strip-item"><div class="num">4.7★</div><div class="lbl">Average provider rating</div></div>
+  </div>
+</section>
+<div id="toast"></div>
+<script src="api.js"></script>
+<script src="script.js"></script>
+<script src="integration.js"></script>
+</body>
+</html>

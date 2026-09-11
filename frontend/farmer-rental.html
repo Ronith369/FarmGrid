@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rental Equipment · Kheti Sahayak</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sb-brand"><div class="brand-mark"></div><div><div class="sb-brand-name">Kheti Sahayak</div><div class="sb-role-tag">Farmer dashboard</div></div></div>
+  <nav class="sb-nav">
+  <a class="sb-link" href="farmer-overview.html"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Overview</a>
+<a class="sb-link active" href="farmer-rental.html"><svg class="ic" viewBox="0 0 24 24"><circle cx="7" cy="17" r="2.5"/><circle cx="17" cy="17" r="2.5"/><path d="M9.5 17h5M4 17 5 9h5l3 4h4l2 4M9 9V6h3"/></svg>Rental Equipment</a>
+<a class="sb-link" href="farmer-nutrition.html"><svg class="ic" viewBox="0 0 24 24"><path d="M12 21c-4-2-8-6-8-11a8 8 0 0 1 16 0c0 5-4 9-8 11Z"/><path d="M12 10v7"/></svg>Nutrition &amp; Protection</a>
+<a class="sb-link" href="farmer-selling.html"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>Crop Selling<span class="badge">12</span></a>
+<a class="sb-link" href="farmer-labour.html"><svg class="ic" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="8" r="2.4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M17 13a4 4 0 0 1 4 4v1"/></svg>Labour Hiring</a>
+
+  </nav>
+  <div class="sb-foot">
+    <div class="sb-user"><div class="sb-avatar">RG</div><div><div class="un">Ravi Gowda</div><div class="ul">Sagar Taluk, 4.2 acres</div></div></div>
+    <div class="sb-switch"><svg class="ic" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>Switch role — <a href="login.html?role=resource_owner&next=provider-overview.html">go to Provider</a></span></div>
+  </div>
+</aside>
+  <div class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button class="hamburger tb-icon-btn" id="hamburger"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <div><div class="tb-title">Rental Equipment</div><div class="tb-sub">Request machinery — FarmGrid ranks and schedules it for you</div></div>
+      </div>
+      <div class="tb-right"><button class="tb-icon-btn" title="Notifications"><svg class="ic" viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 4 1.5 5.5 2 6.5H4C4.5 13.5 6 12 6 8Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg><span class="dot"></span></button></div>
+    </div>
+    <div class="content">
+
+<div class="fg-banner" id="offline-banner" style="display:none;">
+  <svg class="ic" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M2 8.82a15 15 0 0 1 20 0M5 12.9a10 10 0 0 1 14 0M8.5 17a5 5 0 0 1 7 0M12 20h.01"/></svg>
+  <span>You're offline — new requests are cached on this device and will sync automatically once you're back online.</span>
+</div>
+
+<div class="section-head">
+  <div><h2>Rental Equipment</h2><p>Request tractors, harvesters and tools. FarmGrid detects clashes, scores priority transparently, and reschedules automatically if something breaks down.</p></div>
+  <button class="btn btn-primary" onclick="openRequestModal()"><svg class="ic" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M12 5v14M5 12h14"/></svg>Request a resource</button>
+</div>
+
+<div class="fg-toolbar">
+  <button class="btn btn-ghost small" id="offline-toggle-btn" onclick="fgToggleOffline()">Simulate offline mode</button>
+  <button class="btn btn-ghost small" onclick="fgTriggerRain()">🌧 Simulate district rain alert</button>
+</div>
+
+<div class="fg-group-head"><h3>My requests</h3></div>
+<div id="my-requests-list"></div>
+
+<div class="fg-group-head"><h3>Browse &amp; book</h3></div>
+<div class="section-head" style="margin-bottom:14px;">
+  <div></div>
+  <select style="background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:10px 14px;color:var(--cream);font-size:0.85rem;">
+    <option>Within 15 km</option><option>Within 30 km</option><option>Whole district</option>
+  </select>
+</div>
+<div class="grid-cards" id="browse-grid"></div>
+
+<div class="fg-group-head"><h3>Activity &amp; decision log</h3></div>
+<div id="activity-log"></div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="m-request">
+  <div class="modal" style="max-width:520px;">
+    <h3>Request a resource</h3>
+    <div class="msub">FarmGrid schedules feasible slots and ranks competing requests transparently — no first-come-first-served guesswork.</div>
+    <div class="field"><label>Resource</label>
+      <select id="req-resource"></select>
+    </div>
+    <div class="field"><label>Farm location</label>
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="req-location" placeholder="Village / survey no." style="flex:1;">
+        <button class="btn btn-ghost small" type="button" onclick="fgUseMyLocation()">📍 Use my location</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;">
+      <div class="field" style="flex:1;"><label>Earliest start</label><input type="date" id="req-start"></div>
+      <div class="field" style="flex:1;"><label>Latest end</label><input type="date" id="req-end"></div>
+    </div>
+    <div style="display:flex;gap:12px;">
+      <div class="field" style="flex:1;"><label>Duration (hours)</label><input type="number" id="req-duration" placeholder="e.g. 8" min="1"></div>
+      <div class="field" style="flex:1;"><label>Crop stage</label>
+        <select id="req-stage"><option value="planting">Planting</option><option value="vegetative">Vegetative</option><option value="flowering">Flowering</option><option value="ripening">Ripening / harvest-ready</option></select>
+      </div>
+    </div>
+    <div class="field"><label>Urgency justification</label><textarea id="req-urgency" placeholder="Why does this need to happen in this window?"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('m-request')">Cancel</button>
+      <button class="btn btn-primary" onclick="fgSubmitRequestForm()">Submit request</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<script src="api.js"></script>
+<script src="script.js"></script>
+<script src="farmgrid.js"></script>
+<script>
+var ME = 'Ravi Gowda';
+var resourceIcons = {
+  Tractor:'<circle cx="7" cy="17" r="2.5"/><circle cx="17" cy="17" r="2.5"/><path d="M9.5 17h5M4 17 5 9h5l3 4h4l2 4M9 9V6h3"/>',
+  Tiller:'<circle cx="7" cy="17" r="2.5"/><circle cx="17" cy="17" r="2.5"/><path d="M9.5 17h5M4 17 5 9h5l3 4h4l2 4M9 9V6h3"/>',
+  Sprayer:'<circle cx="7" cy="17" r="2.5"/><circle cx="17" cy="17" r="2.5"/><path d="M9.5 17h5M4 17 5 9h5l3 4h4l2 4M9 9V6h3"/>',
+  Harvester:'<circle cx="7" cy="17" r="2.5"/><circle cx="17" cy="17" r="2.5"/><path d="M9.5 17h5M4 17 5 9h5l3 4h4l2 4M9 9V6h3"/>',
+  'Seed Drill':'<circle cx="7" cy="17" r="2.5"/><circle cx="17" cy="17" r="2.5"/><path d="M9.5 17h5M4 17 5 9h5l3 4h4l2 4M9 9V6h3"/>'
+};
+var statusLabel = {pending:'Pending review', assigned:'Assigned', queued:'Queued', disrupted:'Reallocating…', reassigned:'Reassigned', cancelled:'Cancelled'};
+var statusTagClass = {assigned:'tag-olive', queued:'tag-marigold', pending:'tag-muted', disrupted:'tag-chili', reassigned:'tag-olive', cancelled:'tag-muted'};
+
+function resourceById(id){ return FG_RESOURCES.filter(function(r){return r.id===id;})[0] || {}; }
+
+function renderBrowseGrid(){
+  var el = document.getElementById('browse-grid');
+  el.innerHTML = FG_RESOURCES.filter(function(r){return !r.backup;}).map(function(r){
+    var group = (FG_groupByResource()[r.id]||[]).filter(function(q){return q.status!=='cancelled';});
+    var conflictNote = group.length>1 && FG_hasOverlapConflict(r.id) ? '<div class="fg-conflict-flag">⚠ '+group.length+' farmers competing for this slot</div>' : '';
+    return '<div class="pcard"><div class="swatch sw-machine"><svg class="ic" viewBox="0 0 24 24">'+(resourceIcons[r.category]||'')+'</svg></div>'+
+      '<div class="body"><h4>'+r.name+'</h4><div class="meta">'+r.category+(r.status==='breakdown'?' · <span style="color:var(--chili)">Under maintenance</span>':'')+'</div>'+
+      '<div class="meta">'+r.distanceKm+' km · '+r.owner+'</div>'+conflictNote+
+      '<div class="price-row"><div class="price">'+r.rate+'</div>'+
+      '<button class="btn btn-primary small" onclick="openRequestModal(\''+r.id+'\')">Request</button></div></div></div>';
+  }).join('');
+}
+
+function renderMyRequests(){
+  var el = document.getElementById('my-requests-list');
+  var mine = FG_REQUESTS.concat(FG_OFFLINE_QUEUE.filter(function(r){return r.farmer===ME;}));
+  if(!mine.length){ el.innerHTML = '<div class="fg-empty">No requests yet — request a resource above to see live priority scoring here.</div>'; return; }
+
+  el.innerHTML = mine.map(function(r){
+    var isQueuedOffline = FG_OFFLINE_QUEUE.indexOf(r)>=0;
+    var res = resourceById(r.resourceId);
+    if(isQueuedOffline){
+      return '<div class="fg-card"><div class="fg-card-top"><div><h4>'+res.name+'</h4><div class="meta">'+r.start+' → '+r.end+' · '+r.durationHrs+'h · '+r.cropStage+'</div></div>'+
+        '<div class="fg-card-right"><span class="tag tag-chili">Queued (offline)</span></div></div></div>';
+    }
+    var s = FG_score(r);
+    var tier = FG_scoreTier(s.total);
+    var group = (FG_groupByResource()[r.resourceId]||[]);
+    var conflict = FG_hasOverlapConflict(r.resourceId, group);
+    return '<div class="fg-card"><div class="fg-card-top"><div><h4>'+res.name+'</h4>'+
+      '<div class="meta">'+r.start+' → '+r.end+' · '+r.durationHrs+'h · '+r.cropStage+' stage</div>'+
+      '<div class="meta">"'+r.urgency+'"</div>'+
+      (conflict?'<div class="fg-conflict-flag">⚠ Overlaps with '+(group.length-1)+' other request(s) on this unit</div>':'')+
+      '</div><div class="fg-card-right">'+
+      '<span class="tag '+(statusTagClass[r.status]||'tag-muted')+'">'+(statusLabel[r.status]||r.status)+'</span>'+
+      '<span class="score-pill '+tier+'">'+s.total+'/100</span>'+
+      '<span class="fg-explain-toggle" onclick="fgToggleBreakdown(this)">Why this score? ▾</span>'+
+      '</div></div>'+
+      '<div class="fg-breakdown">'+ s.factors.map(function(f){
+        return '<div class="fg-factor"><span class="fname">'+f.label+'</span><div class="fbar-track"><div class="fbar-fill" style="width:'+(100*f.pts/f.max)+'%"></div></div><span class="fpts">'+f.pts+'/'+f.max+'</span></div>';
+      }).join('') +
+      '<div class="fg-explain-text">'+ s.factors.map(function(f){return f.note;}).join(' · ') +'</div></div>'+
+      (r.status==='assigned' ? '<div class="fg-slot">Feasible slot confirmed with '+ (Math.round(res.distanceKm*3)+15) +' min logistics buffer before the next booking on this unit.</div>' : '') +
+      '</div>';
+  }).join('');
+}
+
+function renderActivity(){
+  var el = document.getElementById('activity-log');
+  if(!FG_ACTIVITY.length){ el.innerHTML = '<div class="fg-empty">No activity yet.</div>'; return; }
+  el.innerHTML = FG_ACTIVITY.slice(0,12).map(function(a){
+    return '<div class="fg-activity">'+a.msg+'<div class="fa-time">'+a.at.toLocaleString()+'</div></div>';
+  }).join('');
+}
+
+function renderAll(){ renderBrowseGrid(); renderMyRequests(); renderActivity(); updateOfflineUI(); }
+
+function fgToggleBreakdown(el){
+  var card = el.closest('.fg-card');
+  card.querySelector('.fg-breakdown').classList.toggle('show');
+  el.textContent = card.querySelector('.fg-breakdown').classList.contains('show') ? 'Hide breakdown ▴' : 'Why this score? ▾';
+}
+
+function openRequestModal(resourceId){
+  var sel = document.getElementById('req-resource');
+  sel.innerHTML = FG_RESOURCES.filter(function(r){return !r.backup && r.status!=='breakdown';}).map(function(r){
+    return '<option value="'+r.id+'"'+(r.id===resourceId?' selected':'')+'>'+r.name+' — '+r.rate+'</option>';
+  }).join('');
+  document.getElementById('req-location').value = 'Sagar Taluk, Shivamogga';
+  document.getElementById('req-start').value = '';
+  document.getElementById('req-end').value = '';
+  document.getElementById('req-duration').value = '';
+  document.getElementById('req-urgency').value = '';
+  openModal('m-request');
+}
+function fgUseMyLocation(){
+  document.getElementById('req-location').value = 'Sagar Taluk (GPS pin captured)';
+  toast('Location captured from device GPS');
+}
+function fgSubmitRequestForm(){
+  var resourceId = document.getElementById('req-resource').value;
+  var start = document.getElementById('req-start').value;
+  var end = document.getElementById('req-end').value;
+  var duration = document.getElementById('req-duration').value;
+  var stage = document.getElementById('req-stage').value;
+  var urgency = document.getElementById('req-urgency').value;
+  if(!resourceId || !start || !end || !duration){ toast('Fill in resource, dates and duration'); return; }
+  var result = FG_submitRequest({
+    farmer: ME, resourceId: resourceId, start: start, end: end, durationHrs: duration,
+    cropStage: stage, urgency: urgency || 'No additional justification provided.',
+    weatherRisk: FG_RESOURCES._rainAlert ? 'high' : 'medium', constraintsOk: true
+  });
+  closeModal('m-request');
+  if(result.queued){ toast('Offline — request cached locally, will sync automatically'); }
+  else { toast(result.conflict ? 'Request submitted — competing requests detected, priority engine ranked it' : 'Request submitted and scheduled'); }
+  renderAll();
+}
+
+function fgToggleOffline(){
+  window.FG_OFFLINE = !window.FG_OFFLINE;
+  updateOfflineUI();
+  if(!window.FG_OFFLINE){
+    var n = FG_syncOfflineQueue();
+    if(n>0) toast('Synced '+n+' queued request(s)');
+    renderAll();
+  }
+}
+function updateOfflineUI(){
+  var banner = document.getElementById('offline-banner');
+  var btn = document.getElementById('offline-toggle-btn');
+  banner.style.display = window.FG_OFFLINE ? 'flex' : 'none';
+  if(window.FG_OFFLINE) banner.classList.add('offline'); else banner.classList.remove('offline');
+  btn.textContent = window.FG_OFFLINE ? 'Go back online' : 'Simulate offline mode';
+}
+function fgTriggerRain(){
+  FG_RESOURCES._rainAlert = true;
+  FG_triggerRainAlert();
+  toast('Rain alert issued — open requests re-ranked');
+  renderAll();
+}
+
+renderAll();
+</script>
+<script src="integration.js"></script>
+</body>
+</html>

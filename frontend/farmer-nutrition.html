@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nutrition &amp; Protection · Kheti Sahayak</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+  <div class="sb-brand"><div class="brand-mark"></div><div><div class="sb-brand-name">Kheti Sahayak</div><div class="sb-role-tag">Farmer dashboard</div></div></div>
+  <nav class="sb-nav">
+  <a class="sb-link" href="farmer-overview.html"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Overview</a>
+<a class="sb-link" href="farmer-rental.html"><svg class="ic" viewBox="0 0 24 24"><circle cx="7" cy="17" r="2.5"/><circle cx="17" cy="17" r="2.5"/><path d="M9.5 17h5M4 17 5 9h5l3 4h4l2 4M9 9V6h3"/></svg>Rental Equipment</a>
+<a class="sb-link active" href="farmer-nutrition.html"><svg class="ic" viewBox="0 0 24 24"><path d="M12 21c-4-2-8-6-8-11a8 8 0 0 1 16 0c0 5-4 9-8 11Z"/><path d="M12 10v7"/></svg>Nutrition &amp; Protection</a>
+<a class="sb-link" href="farmer-selling.html"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7h18l-1.5 11a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>Crop Selling<span class="badge">12</span></a>
+<a class="sb-link" href="farmer-labour.html"><svg class="ic" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="8" r="2.4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M17 13a4 4 0 0 1 4 4v1"/></svg>Labour Hiring</a>
+
+  </nav>
+  <div class="sb-foot">
+    <div class="sb-user"><div class="sb-avatar">RG</div><div><div class="un">Ravi Gowda</div><div class="ul">Sagar Taluk, 4.2 acres</div></div></div>
+    <div class="sb-switch"><svg class="ic" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>Switch role — <a href="login.html?role=resource_owner&next=provider-overview.html">go to Provider</a></span></div>
+  </div>
+</aside>
+  <div class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button class="hamburger tb-icon-btn" id="hamburger"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <div><div class="tb-title">Nutrition &amp; Protection</div><div class="tb-sub">Fertilizers and pesticides sold by verified local dealers</div></div>
+      </div>
+      <div class="tb-right"><button class="tb-icon-btn" title="Notifications"><svg class="ic" viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 4 1.5 5.5 2 6.5H4C4.5 13.5 6 12 6 8Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg><span class="dot"></span></button></div>
+    </div>
+    <div class="content">
+      
+<div class="section-head"><div><h2>Nutrition &amp; Protection</h2><p>Fertilizers to feed the soil, pesticides to defend the crop.</p></div></div>
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab(this,'fert')">Fertilizers</button>
+  <button class="tab-btn" onclick="switchTab(this,'pest')">Pesticides</button>
+</div>
+<div class="reco-panel">
+  <div class="reco-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M12 22V12M12 12c0-4 3-7 7-7 0 4-3 7-7 7Zm0 0C12 8 9 5 5 5c0 4 3 7 7 7Z"/></svg></div>
+  <div class="reco-copy"><h4>Not sure what to feed the soil?</h4><p>Tell us the soil colour, crop and stage — we'll suggest the right fertilizer and dose, using today's weather in the background.</p></div>
+  <button class="btn btn-olive" onclick="openModal('m-soil')">Check soil &amp; recommend</button>
+</div>
+<div class="grid-cards" id="tab-fert"><div class="pcard">
+    <div class="swatch sw-leaf"><svg class="ic" viewBox="0 0 24 24"><path d="M12 21c-4-2-8-6-8-11a8 8 0 0 1 16 0c0 5-4 9-8 11Z"/><path d="M12 10v7"/></svg></div>
+    <div class="body">
+      <h4>Urea, 45kg bag</h4>
+      <div class="meta">Nitrogen · General purpose</div>
+      
+      <div class="price-row">
+        <div class="price">₹266<small> /bag</small></div>
+        <button class="btn btn-olive small" onclick="toast('Add to order sent for Urea, 45kg bag')">Add to order</button>
+      </div>
+    </div>
+  </div><div class="pcard">
+    <div class="swatch sw-leaf"><svg class="ic" viewBox="0 0 24 24"><path d="M12 21c-4-2-8-6-8-11a8 8 0 0 1 16 0c0 5-4 9-8 11Z"/><path d="M12 10v7"/></svg></div>
+    <div class="body">
+      <h4>DAP, 50kg bag</h4>
+      <div class="meta">Phosphorus for root growth</div>
+      
+      <div class="price-row">
+        <div class="price">₹1,350<small> /bag</small></div>
+        <button class="btn btn-olive small" onclick="toast('Add to order sent for DAP, 50kg bag')">Add to order</button>
+      </div>
+    </div>
+  </div><div class="pcard">
+    <div class="swatch sw-leaf"><svg class="ic" viewBox="0 0 24 24"><path d="M12 21c-4-2-8-6-8-11a8 8 0 0 1 16 0c0 5-4 9-8 11Z"/><path d="M12 10v7"/></svg></div>
+    <div class="body">
+      <h4>NPK 19:19:19</h4>
+      <div class="meta">Balanced feed · 50kg</div>
+      
+      <div class="price-row">
+        <div class="price">₹1,480<small> /bag</small></div>
+        <button class="btn btn-olive small" onclick="toast('Add to order sent for NPK 19:19:19')">Add to order</button>
+      </div>
+    </div>
+  </div><div class="pcard">
+    <div class="swatch sw-leaf"><svg class="ic" viewBox="0 0 24 24"><path d="M12 21c-4-2-8-6-8-11a8 8 0 0 1 16 0c0 5-4 9-8 11Z"/><path d="M12 10v7"/></svg></div>
+    <div class="body">
+      <h4>Vermicompost</h4>
+      <div class="meta">Organic · 40kg bag</div>
+      
+      <div class="price-row">
+        <div class="price">₹360<small> /bag</small></div>
+        <button class="btn btn-olive small" onclick="toast('Add to order sent for Vermicompost')">Add to order</button>
+      </div>
+    </div>
+  </div><div class="pcard">
+    <div class="swatch sw-leaf"><svg class="ic" viewBox="0 0 24 24"><path d="M12 21c-4-2-8-6-8-11a8 8 0 0 1 16 0c0 5-4 9-8 11Z"/><path d="M12 10v7"/></svg></div>
+    <div class="body">
+      <h4>Zinc Sulphate</h4>
+      <div class="meta">Micronutrient, 10kg</div>
+      
+      <div class="price-row">
+        <div class="price">₹820<small> /pack</small></div>
+        <button class="btn btn-olive small" onclick="toast('Add to order sent for Zinc Sulphate')">Add to order</button>
+      </div>
+    </div>
+  </div></div>
+<div class="reco-panel">
+  <div class="reco-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 5-3 8-7 9-4-1-7-4-7-9V6z"/></svg></div>
+  <div class="reco-copy"><h4>Which pesticide fits today's conditions?</h4><p>Based on temperature, rain, humidity and crop age, we'll flag the actual risk and suggest a matching product.</p></div>
+  <button class="btn btn-olive" onclick="openModal('m-pest')">Check risk &amp; recommend</button>
+</div>
+<div class="grid-cards" id="tab-pest" style="display:none"><div class="pcard">
+    <div class="swatch sw-leaf"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 5-3 8-7 9-4-1-7-4-7-9V6z"/></svg></div>
+    <div class="body">
+      <h4>Neem-based Bio Pesticide</h4>
+      <div class="meta">Organic · broad spectrum</div>
+      
+      <div class="price-row">
+        <div class="price">₹420<small> /litre</small></div>
+        <button class="btn btn-olive small" onclick="toast('Add to order sent for Neem-based Bio Pesticide')">Add to order</button>
+      </div>
+    </div>
+  </div><div class="pcard">
+    <div class="swatch sw-leaf"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 5-3 8-7 9-4-1-7-4-7-9V6z"/></svg></div>
+    <div class="body">
+      <h4>Chlorpyrifos 20% EC</h4>
+      <div class="meta">Soil & stem borer control</div>
+      
+      <div class="price-row">
+        <div class="price">₹640<small> /litre</small></div>
+        <button class="btn btn-olive small" onclick="toast('Add to order sent for Chlorpyrifos 20% EC')">Add to order</button>
+      </div>
+    </div>
+  </div><div class="pcard">
+    <div class="swatch sw-leaf"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 5-3 8-7 9-4-1-7-4-7-9V6z"/></svg></div>
+    <div class="body">
+      <h4>Mancozeb 75% WP</h4>
+      <div class="meta">Fungicide · blight control</div>
+      
+      <div class="price-row">
+        <div class="price">₹380<small> /kg</small></div>
+        <button class="btn btn-olive small" onclick="toast('Add to order sent for Mancozeb 75% WP')">Add to order</button>
+      </div>
+    </div>
+  </div><div class="pcard">
+    <div class="swatch sw-leaf"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 5-3 8-7 9-4-1-7-4-7-9V6z"/></svg></div>
+    <div class="body">
+      <h4>Imidacloprid 17.8% SL</h4>
+      <div class="meta">Sucking pest control</div>
+      
+      <div class="price-row">
+        <div class="price">₹560<small> /250ml</small></div>
+        <button class="btn btn-olive small" onclick="toast('Add to order sent for Imidacloprid 17.8% SL')">Add to order</button>
+      </div>
+    </div>
+  </div></div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="m-soil">
+  <div class="modal" style="max-width:500px;">
+    <h3>Soil-based fertilizer check</h3>
+    <div class="msub">A quick read on your soil and crop stage — we combine it with today's weather to suggest what to feed.</div>
+    <div class="field"><label>Soil colour</label>
+      <select id="soil-colour"><option value="Black">Black (regur)</option><option value="Red">Red</option><option value="Laterite">Laterite</option><option value="Alluvial">Alluvial</option><option value="Sandy">Sandy</option><option value="Loamy">Loamy</option></select>
+    </div>
+    <div class="field"><label>Crop</label>
+      <select id="soil-crop"><option>Paddy</option><option>Maize</option><option>Areca nut</option><option>Cotton</option><option>Groundnut</option><option>Vegetables</option><option>Other</option></select>
+    </div>
+    <div class="field"><label>Crop age (days since sowing/transplant)</label><input type="number" id="soil-age" placeholder="e.g. 35" min="0"></div>
+    <div class="field"><label>Upload soil photo (JPG/PNG/WEBP, max 5 MB)</label><input type="file" id="soil-image" accept="image/jpeg,image/png,image/webp"></div>
+    <div class="weather-row" id="soil-weather-row">
+      <svg class="ic" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M6 15a4 4 0 0 1 0-8 5 5 0 0 1 9.6-1.5A4.5 4.5 0 0 1 18 15H6Z"/></svg>
+      <span class="wl">Temperature:</span> <span class="wv" id="soil-temp-val">not fetched yet</span>
+      <button class="btn btn-ghost small" onclick="fgFetchWeatherInto('soil')">Fetch current weather</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('m-soil')">Cancel</button>
+      <button class="btn btn-primary" onclick="submitSoilCheck()">Get recommendation</button>
+    </div>
+    <div id="soil-result"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="m-pest">
+  <div class="modal" style="max-width:500px;">
+    <h3>Pesticide risk check</h3>
+    <div class="msub">We weigh live weather against your crop's age to flag the real risk right now.</div>
+    <div class="field"><label>Crop</label>
+      <select id="pest-crop"><option>Paddy</option><option>Maize</option><option>Areca nut</option><option>Cotton</option><option>Groundnut</option><option>Vegetables</option><option>Other</option></select>
+    </div>
+    <div class="field"><label>Crop age (days since sowing/transplant)</label><input type="number" id="pest-age" placeholder="e.g. 12" min="0"></div>
+    <div class="weather-row" id="pest-weather-row">
+      <svg class="ic" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M6 15a4 4 0 0 1 0-8 5 5 0 0 1 9.6-1.5A4.5 4.5 0 0 1 18 15H6Z"/></svg>
+      <span class="wl">Weather:</span> <span class="wv" id="pest-weather-val">not fetched yet</span>
+      <button class="btn btn-ghost small" onclick="fgFetchWeatherInto('pest')">Fetch current weather</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('m-pest')">Cancel</button>
+      <button class="btn btn-primary" onclick="submitPestCheck()">Get recommendation</button>
+    </div>
+    <div id="pest-result"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<script src="api.js"></script>
+<script src="script.js"></script>
+<script src="advisor.js"></script>
+<script>var fgWeather = { soil:null, pest:null };</script>
+<script src="integration.js"></script>
+</body>
+</html>

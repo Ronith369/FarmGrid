@@ -1,0 +1,4 @@
+location,crop,soil_type,soil_color,moisture,water_availability,previous_crop,previous_yield,fertilizer
+ExampleVillage,Tomato,Loamy,Brown,55,70,Maize,2500,NPK
+ExampleVillage,Rice,Clay,Dark,75,90,Wheat,4200,Urea
+ExampleVillage,Cotton,Black,Black,45,55,Soybean,1800,DAP
